@@ -29,13 +29,13 @@ router.get('/', async (req, res) => {
 
 })
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params
-    const product = await productManager.getProductById(id)
+router.get('/:pid', async (req, res) => {
+    const { pid } = req.params
+    const product = await productManager.getProductById(pid)
 
     if(!product){
         res.status(404).send({
-            Error: `El producto con el ID: ${id} es inexistente. Pruebe ingresando otro ID`
+            Error: `El producto con el ID: ${pid} es inexistente. Pruebe ingresando otro ID`
         })
     }
     else {
@@ -63,20 +63,20 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params
+router.put('/:pid', async (req, res) => {
+    const { pid } = req.params
     const { body } = req
 
     try {
-        if(!await productManager.getProductById(id)){
+        if(!await productManager.getProductById(pid)){
             res.status(404).send({
                 Error: 'ID INEXISTENTE'
             })
             return
         }
 
-        await productManager.updateProduct(id, body)
-        res.status(202).send({Accepted: `El producto con id: ${id} ha sido modificado.`})
+        await productManager.updateProduct(pid, body)
+        res.status(202).send({Accepted: `El producto con id: ${pid} ha sido modificado.`})
     } catch (error) {
         res.status(500).send({
             message: 'Ha ocurrido un error en el servidor',
@@ -85,10 +85,10 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params
+router.delete('/:pid', async (req, res) => {
+    const { pid } = req.params
 
-    if(!await productManager.getProductById(id)){
+    if(!await productManager.getProductById(pid)){
         res.status(404).send({
             Error: 'ID INEXISTENTE'
         })
@@ -96,7 +96,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     await productManager.deleteProduct(id)
-    res.status(200).send({OK: `El producto con id: ${id} ha sido eliminado.`})
+    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
 })
 
 module.exports = router
