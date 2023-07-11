@@ -1,4 +1,4 @@
-# ProyectoCoderHouse
+# Proyecto Coder House
 # Creación de un servidor que contiene los endpoints y servicios necesarios para gestionar los productos y carritos de compra en el e-commerce
 En este respositorio se desarrollo un servidor basado en Node.JS y express, que se escucha en el puerto 8080 y dispone de dos grupos de rutas: /products y /carts. Dichos endpoints estan implementados con el router de express.
 
