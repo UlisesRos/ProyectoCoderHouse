@@ -116,19 +116,5 @@
       "static/alf11.png"
     ],
     "id": 10
-  },
-  {
-    "status": true,
-    "title": "Caramelos",
-    "description": "Sin description",
-    "code": "a98",
-    "price": 10,
-    "stock": 8,
-    "category": "Golosinas",
-    "thumbnail": [
-      "static/ulises.img",
-      "static/franco.png"
-    ],
-    "id": 11
   }
 ]

@@ -1,10 +1,10 @@
 const { Router } = require('express')
 const ProductManager = require('../../managers/ProductManager')
+const { idInex } = require('../../middlewares')
 
 // Creacion de una nueva instancia de la class ProductManager
 const productManager = new ProductManager('./../data/productos.json')
 const router = Router()
-
 
 router.get('/', async (req, res) => {
     const { limit } = req.query
@@ -29,19 +29,11 @@ router.get('/', async (req, res) => {
 
 })
 
-router.get('/:pid', async (req, res) => {
+router.get('/:pid', idInex, async (req, res) => {
     const { pid } = req.params
     const product = await productManager.getProductById(pid)
 
-    if(!product){
-        res.status(404).send({
-            Error: `El producto con el ID: ${pid} es inexistente. Pruebe ingresando otro ID`
-        })
-    }
-    else {
-        res.send(product)
-    }
-
+    res.send(product)
 })
 
 router.post('/', async (req, res) => {
@@ -63,39 +55,29 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.put('/:pid', async (req, res) => {
+router.put('/:pid', idInex, async (req, res) => {
     const { pid } = req.params
     const { body } = req
 
     try {
-        if(!await productManager.getProductById(pid)){
-            res.status(404).send({
-                Error: 'ID INEXISTENTE'
-            })
-            return
-        }
-
+        
         await productManager.updateProduct(pid, body)
         res.status(202).send({Accepted: `El producto con id: ${pid} ha sido modificado.`})
+
     } catch (error) {
+
         res.status(500).send({
             message: 'Ha ocurrido un error en el servidor',
             exception: error.stack
         })
     }
+
 })
 
-router.delete('/:pid', async (req, res) => {
+router.delete('/:pid', idInex, async (req, res) => {
     const { pid } = req.params
 
-    if(!await productManager.getProductById(pid)){
-        res.status(404).send({
-            Error: 'ID INEXISTENTE'
-        })
-        return
-    }
-
-    await productManager.deleteProduct(id)
+    await productManager.deleteProduct(pid)
     res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
 })
 
