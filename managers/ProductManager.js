@@ -19,9 +19,9 @@ class ProductManager {
             status: true,
             ...producto,
             thumbnail: producto.thumbnail ? producto.thumbnail.split(", ") : [],
-            id: newId + 1
+            id
         })
-        
+
         await fs.writeFile(this.filepath, JSON.stringify(product, null, 2))
     }
 

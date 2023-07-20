@@ -41,6 +41,8 @@ router.post('/', async (req, res) => {
 
     const product = await productManager.getProducts()
 
+    const newId = product[product.length - 1]?.id || 0
+    
     if(!body.title || !body.description || !body.price || !body.category || !body.code || !body.stock){
         res.status(400).send({
             Error: 'todos los campos son obligatorios'
@@ -50,9 +52,11 @@ router.post('/', async (req, res) => {
             Error: 'title o code ya existe'
         })
     } else {
-        await productManager.addProduct(body)
+        req.io.emit('addProduct', body, id = newId + 1);
+        await productManager.addProduct(body, id = newId + 1)
         res.status(201).send({Created: `El Producto ${body.title} fue creado con exito`})
     }
+    
 })
 
 router.put('/:pid', idInex, async (req, res) => {
@@ -77,6 +81,8 @@ router.put('/:pid', idInex, async (req, res) => {
 router.delete('/:pid', idInex, async (req, res) => {
     const { pid } = req.params
 
+    req.io.emit('deleteProduct', pid)
+    
     await productManager.deleteProduct(pid)
     res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
 })
