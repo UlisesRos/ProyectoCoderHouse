@@ -7,7 +7,7 @@
     "price": 500,
     "stock": 15,
     "category": "Lacteos",
-    "thumbnail": [],
+    "thumbnail": ["static/img/dulceleche.jfif"],
     "id": 1
   },
   {
@@ -18,7 +18,9 @@
     "price": 365,
     "stock": 15,
     "category": "Lacteos",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/crema.webp"
+    ],
     "id": 2
   },
   {
@@ -29,7 +31,9 @@
     "price": 499,
     "stock": 15,
     "category": "Lacteos",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/manteca.jfif"
+    ],
     "id": 3
   },
   {
@@ -40,7 +44,9 @@
     "price": 200,
     "stock": 15,
     "category": "Aguas",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/agua.jfif"
+    ],
     "id": 4
   },
   {
@@ -52,7 +58,7 @@
     "stock": 15,
     "category": "Secos",
     "thumbnail": [
-      "static/arr.png"
+      "static/img/arroz.jfif"
     ],
     "id": 5
   },
@@ -64,7 +70,9 @@
     "price": 650,
     "stock": 15,
     "category": "Secos",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/azucar.jfif"
+    ],
     "id": 6
   },
   {
@@ -76,8 +84,7 @@
     "stock": 15,
     "category": "Verduleria",
     "thumbnail": [
-      "static/tomato.png",
-      "static/tamatito.png"
+      "static/img/tomate.avif"
     ],
     "id": 7
   },
@@ -89,7 +96,9 @@
     "price": 230,
     "stock": 15,
     "category": "Verduleria",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/carbon.jpg"
+    ],
     "id": 8
   },
   {
@@ -100,7 +109,9 @@
     "price": 199,
     "stock": 15,
     "category": "Lacteos",
-    "thumbnail": [],
+    "thumbnail": [
+      "static/img/leche.jpg"
+    ],
     "id": 9
   },
   {
@@ -112,8 +123,7 @@
     "stock": 80,
     "category": "Dulces",
     "thumbnail": [
-      "static/AlfajorGrandote.png",
-      "static/alf11.png"
+      "static/img/alfajor.jpg"
     ],
     "id": 10
   }

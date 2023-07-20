@@ -12,6 +12,10 @@ router.get('/', async (req, res) => {
 
     res.render('home', {
         title: 'Home',
+        user: {
+            ...req.user,
+            isAdmin: req.user.role == 'Admin'
+        },
         products,
         style: 'home'
     })
@@ -23,6 +27,10 @@ router.get('/realtimeproducts', async (req, res) => {
 
     res.render('realtimeproducts', {
         title: 'Products in Real Time',
+        user: {
+            ...req.user,
+            isAdmin: req.user.role == 'Admin'
+        },
         products,
         style: 'realtimeproducts'
     })

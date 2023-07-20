@@ -4,6 +4,16 @@ const productManager = new ProductManager('./../data/productos.json')
 const cartManager = new CartManager('./../data/carrito.json')
 
 module.exports = {
+
+    usuarioAut (req, res, next) {
+        req.user = {
+            name: 'Ulises Ros',
+            role: 'Admin'
+        }
+
+        next()
+    },
+    
     async idInex (req, res, next) {
     
         const { pid } = req.params

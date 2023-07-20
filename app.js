@@ -10,6 +10,7 @@ const server = http.createServer(app)
 const io = new Server(server) // SOCKET
 
 const SocketManager = require('./websocket')
+const { usuarioAut } = require('./middlewares')
 
 //handlebars
 app.engine('handlebars', handlebars.engine())
@@ -26,6 +27,8 @@ app.use((req, res, next) => {
 
     next()
 })
+
+app.use(usuarioAut)
 
 // ruta del home
 app.use('/', home)
