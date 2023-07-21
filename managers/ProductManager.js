@@ -18,7 +18,7 @@ class ProductManager {
         product.push({
             status: true,
             ...producto,
-            thumbnail: producto.thumbnail ? producto.thumbnail.split(", ") : [],
+            thumbnail: producto.thumbnail ? `static/img/${producto.thumbnail.split(", ")}` : [],
             id
         })
 

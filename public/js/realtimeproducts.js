@@ -11,11 +11,11 @@ socket.on('addProduct', (product, id) => {
 
     const div = d.createElement('div')
     div.setAttribute('id', id)
-    div.innerHTML = `<div class="uk-card uk-card-default uk-card-hover uk-border-rounded">
-                            <div class="uk-card-media-top">
-                                <img alt="foto producto" />
+    div.innerHTML = `<div class="uk-card uk-card-default uk-card-hover uk-border-rounded" style="height: 550px;">
+                            <div class="uk-card-media-top uk-flex uk-flex-center" style="height: 200px;">
+                                <img alt="foto producto" src="static/img/${product.thumbnail}" />
                             </div>
-                            <div class="uk-card-body">
+                            <div class="uk-card-body" style="height: 400px; text-align: center;">
                                 <h3 class="uk-card-title">${product.title}</h3>
                                 <h5>$${product.price}</h5>
                                 <p>${product.description}</p>

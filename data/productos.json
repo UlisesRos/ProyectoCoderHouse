@@ -7,7 +7,9 @@
     "price": 500,
     "stock": 15,
     "category": "Lacteos",
-    "thumbnail": ["static/img/dulceleche.jfif"],
+    "thumbnail": [
+      "static/img/dulceleche.jfif"
+    ],
     "id": 1
   },
   {
