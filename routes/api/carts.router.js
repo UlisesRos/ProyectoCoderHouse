@@ -1,9 +1,7 @@
 const { Router } = require('express')
-const CartManager = require('../../managers/CartManager')
-const { cartIdInex } = require('../../middlewares')
+const cartManager = require('../../dao/managersMongo/cart.manager')
+const productManager = require('../../dao/managersMongo/product.manager')
 
-// Creacion de una nueva instancia de CARTMANAGER
-const cartManager = new CartManager('./../data/carrito.json')
 const router = Router()
 
 // Creacion de un nuevo CARRITO
@@ -16,18 +14,56 @@ router.post('/', async (req, res) => {
 
 // Leer los productos del carrito con su C-ID
 
-router.get('/:cid', cartIdInex, async (req, res) => {
+router.get('/:cid', async (req, res) => {
     const { cid } = req.params
-    const cartId = await cartManager.getCartById(cid)
 
-    res.send(cartId)
+    try {
+        
+        const cartId = await cartManager.getCartById( cid )
+        if(!cartId){
+            res.status(404).send({
+                Error: 'ID DE CARRITO INEXISTENTE'
+            })
+            return
+        }
+
+        res.send(cartId)
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+    }
+
 })
 
-router.post('/:cid/products/:id', cartIdInex, async (req, res) => {
-    const { cid, id } = req.params
+router.post('/:cid/products/:idProduct', async (req, res) => {
+    const { cid, idProduct } = req.params
 
-    await cartManager.addProductCart(cid, id)
-    res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${cid}`})
+    try {
+        const cartId = await cartManager.getCartById( cid )
+        const productId = await productManager.getProductById( idProduct )
+
+        if(!cartId){
+            res.status(404).send({
+                Error: 'ID DE CARRITO INEXISTENTE'
+            })
+            return
+        }
+
+        if(!productId){
+            res.status(404).send({
+                Error: 'ID DEL PRODUCTO INEXISTENTE'
+            })
+            return
+        }
+        
+        await cartManager.addProductCart( cid, idProduct )
+        res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${ cid }`})
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+    }
 })
 
 module.exports = router

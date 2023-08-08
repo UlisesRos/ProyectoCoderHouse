@@ -1,9 +1,6 @@
 const { Router } = require('express')
-const ProductManager = require('../../managers/ProductManager')
-const { idInex } = require('../../middlewares')
+const productManager = require('../../dao/managersMongo/product.manager')
 
-// Creacion de una nueva instancia de la class ProductManager
-const productManager = new ProductManager('./../data/productos.json')
 const router = Router()
 
 router.get('/', async (req, res) => {
@@ -29,19 +26,31 @@ router.get('/', async (req, res) => {
 
 })
 
-router.get('/:pid', idInex, async (req, res) => {
+router.get('/:pid', async (req, res) => {
     const { pid } = req.params
-    const product = await productManager.getProductById(pid)
 
-    res.send(product)
+    try {
+
+        const product = await productManager.getProductById(pid)
+        
+        if(!product){
+            res.status(404).send({
+                Error: 'ID INEXISTENTE'
+            })
+        }
+        res.send(product)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Ocurrio un error en el servidor'})
+    }
+
 })
 
 router.post('/', async (req, res) => {
     const { body } = req
 
     const product = await productManager.getProducts()
-
-    const newId = product[product.length - 1]?.id || 0
     
     if(!body.title || !body.description || !body.price || !body.category || !body.code || !body.stock){
         res.status(400).send({
@@ -52,21 +61,28 @@ router.post('/', async (req, res) => {
             Error: 'title o code ya existe'
         })
     } else {
-        req.io.emit('addProduct', body, id = newId + 1);
-        await productManager.addProduct(body, id = newId + 1)
+        req.io.emit('addProduct', body);
+        await productManager.addProduct(body)
         res.status(201).send({Created: `El Producto ${body.title} fue creado con exito`})
     }
     
 })
 
-router.put('/:pid', idInex, async (req, res) => {
+router.put('/:pid', async (req, res) => {
     const { pid } = req.params
     const { body } = req
 
     try {
         
-        await productManager.updateProduct(pid, body)
-        res.status(202).send({Accepted: `El producto con id: ${pid} ha sido modificado.`})
+        const result = await productManager.updateProduct(pid, body)
+        if(result.matchedCount >= 1){
+            res.status(202).send({Accepted: `El producto con id: ${pid} ha sido modificado.`})
+            return
+        }
+        
+        res.status(404).send({
+            Error: 'ID INEXISTENTE'
+        })
 
     } catch (error) {
 
@@ -78,13 +94,30 @@ router.put('/:pid', idInex, async (req, res) => {
 
 })
 
-router.delete('/:pid', idInex, async (req, res) => {
+router.delete('/:pid', async (req, res) => {
     const { pid } = req.params
-
-    req.io.emit('deleteProduct', pid)
     
-    await productManager.deleteProduct(pid)
-    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+    try {
+        
+        const productId = await productManager.getProductById( pid )
+
+        req.io.emit('deleteProduct', productId.code)
+
+        const result = await productManager.deleteProduct(pid)
+        if (result.deletedCount >= 1) {
+            res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+            return
+        }
+        
+        res.status(404).send({
+            Error: 'ID INEXISTENTE'
+        })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Ocurrio un error en el servidor'})
+    }
+    
 })
 
 module.exports = router

@@ -1,3 +1,5 @@
+// PRODUCT MANAGER CON FILESYSTEM
+
 const fs = require('fs/promises')
 const path = require('path')
 
@@ -9,11 +11,10 @@ class ProductManager {
         this.filepath = path.join(__dirname, this.filename)
     }
 
-    async addProduct (producto) {
+    async addProduct ( producto, id ) {
         const data = await fs.readFile(this.filepath, 'utf-8')
         const product = JSON.parse(data)
 
-        const newId = product[product.length - 1]?.id || 0
 
         product.push({
             status: true,
@@ -74,6 +75,6 @@ class ProductManager {
 
 }
 
-module.exports = ProductManager
+    module.exports = ProductManager
 
 

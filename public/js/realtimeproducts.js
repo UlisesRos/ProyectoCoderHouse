@@ -7,10 +7,10 @@ const socket = io()
 const listProducts = d.getElementById('list-products')
 
 // CREACION del producto a treves de la peticion POST
-socket.on('addProduct', (product, id) => {
+socket.on('addProduct', (product) => {
 
     const div = d.createElement('div')
-    div.setAttribute('id', id)
+    div.setAttribute('id', product.code)
     div.innerHTML = `<div class="uk-card uk-card-default uk-card-hover uk-border-rounded" style="height: 550px;">
                             <div class="uk-card-media-top uk-flex uk-flex-center" style="height: 200px;">
                                 <img alt="foto producto" src="static/img/${product.thumbnail}" />
@@ -36,4 +36,3 @@ socket.on('deleteProduct', (pid) => {
 
     listProducts.removeChild(div)
 })
-

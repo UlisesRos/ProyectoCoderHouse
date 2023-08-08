@@ -1,6 +1,5 @@
-const ProductManager = require('../managers/ProductManager')
-const CartManager = require('../managers/CartManager')
-const productManager = new ProductManager('./../data/productos.json')
+const productManager = require('../dao/managersMongo/product.manager')
+const CartManager = require('../dao/managers/CartManager')
 const cartManager = new CartManager('./../data/carrito.json')
 
 module.exports = {
