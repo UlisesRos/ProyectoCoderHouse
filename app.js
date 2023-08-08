@@ -15,7 +15,7 @@
         
         // conectar la base de datos antes de levantar el server
         
-        await mongoose.connect(process.env.MONGO_CONNECT)
+        await mongoose.connect(process.env.MONGO_CONNECT) // Variable de entorno: mongodb+srv://ulisesros70:Ulises12@cluster1.tvi8kiv.mongodb.net/ecommerce?retryWrites=true&w=majority
         
         const app = express()
         const server = http.createServer(app) 
@@ -52,7 +52,7 @@
         io.on('connection', SocketManager)
         
         
-        const port = process.env.PORT
+        const port = process.env.PORT // Variable de entorno: 8080
         
         server.listen(port, () => {
             console.log(`Servidor leyendose desde http://localhost:${port}`)
