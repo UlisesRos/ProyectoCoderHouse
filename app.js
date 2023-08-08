@@ -6,6 +6,7 @@
     const handlebars = require('express-handlebars')
     const { Server } = require('socket.io')
     const mongoose = require('mongoose')
+    require('dotenv').config()
 
     const { api, home } = require('./routes')
     const SocketManager = require('./websocket')
@@ -14,7 +15,7 @@
         
         // conectar la base de datos antes de levantar el server
         
-        await mongoose.connect("mongodb+srv://ulisesros70:Ulises12@cluster1.tvi8kiv.mongodb.net/ecommerce?retryWrites=true&w=majority")
+        await mongoose.connect(process.env.MONGO_CONNECT)
         
         const app = express()
         const server = http.createServer(app) 
@@ -51,7 +52,7 @@
         io.on('connection', SocketManager)
         
         
-        const port = 8080
+        const port = process.env.PORT
         
         server.listen(port, () => {
             console.log(`Servidor leyendose desde http://localhost:${port}`)
