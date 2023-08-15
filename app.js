@@ -24,7 +24,13 @@
         const { usuarioAut } = require('./middlewares')
         
         //handlebars
-        app.engine('handlebars', handlebars.engine())
+        app.engine('handlebars', handlebars.engine({
+            extname: 'handlebars',
+            runtimeOptions: {
+                allowProtoPropertiesByDefault: true,
+                allowProtoMethodsByDefault: true
+            }
+        }));
         app.set('views', path.join(__dirname, '/views'))
         app.set('view engine', 'handlebars')
         

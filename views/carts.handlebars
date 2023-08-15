@@ -1,0 +1,26 @@
+<div class="uk-flex uk-flex-between align-cart">
+  <div>
+    <h5 class="uk-margin-remove" style="font-weight: bold;">Total: ${{totalCarrito}}</h5>
+  </div>
+  <div>
+    <a <!--href="/pedido"-->
+      <button class="uk-margin-remove uk-button uk-button-secondary uk-button-small uk-margin-top uk-border-rounded">Continuar</button>
+    </a>
+  </div>
+</div>
+<div id="productsInCart" class="uk-margin-top uk-child-width-1-4@m" uk-grid>
+  {{#each products}}
+  <div>
+    <div class="uk-card uk-card-default uk-card-hover uk-border-rounded" style="border: 0.5px solid black">
+      <div class="uk-card-body" style="height: 350px; text-align: center;">
+        <h3 class="uk-card-title" style="font-weight: bold;">{{this.product.title}}</h3>
+        <h5>Cantidad: {{this.quantity}}</h5>
+        <h5>Precio Total: ${{this.product.price}}</h5>
+        <span class="uk-badge" style="padding: 10px;">{{this.product.category}}</span>
+        <br>
+        <button class="uk-button uk-button-secondary uk-button-small uk-margin-top uk-border-rounded">Eliminar</button>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</div>  

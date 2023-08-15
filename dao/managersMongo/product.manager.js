@@ -13,10 +13,58 @@ class ProductManager {
         
     }
 
-    async getProducts () {
-        const products = await productModel.find().lean()
+    async getProducts ( page = 1, limit = 10, query, sort) {
 
-        return products
+        if(sort == 1 || sort == -1){
+
+            const opciones = {
+                page: page,
+                limit: limit,
+                sort: { price: sort },
+                lean: true
+            }
+    
+            if(query){
+    
+                const query1 = {}
+        
+                query1["$or"] = [
+                    query
+                ]
+
+                const products = await productModel.paginate( query1, opciones )
+        
+                return products
+            } else{
+                const products = await productModel.paginate( {}, opciones )
+        
+                return products
+            }
+        } else {
+            
+            const opciones = {
+                page: page,
+                limit: limit,
+                lean: true
+            }
+    
+            if(query){
+    
+                const query1 = {}
+        
+                query1["$or"] = [
+                    query
+                ]
+                const products = await productModel.paginate( query1, opciones )
+        
+                return products
+            } else{
+                const products = await productModel.paginate( {}, opciones )
+        
+                return products
+            }
+        }
+
     }
     
 

@@ -13,6 +13,13 @@ class CartManager {
         return cart
     }
 
+    async getCart (){
+
+        const cart = await cartModel.find().lean()
+
+        return cart
+    }
+
     async getCartById (id) {
 
         const cartId = await cartModel.find({_id: id})
@@ -24,18 +31,6 @@ class CartManager {
 
         let cart = await cartModel.findOne({_id: cid})
         
-        // CREACION DE LOS PRODUCTOS DENTRO DEL CARRITO CON UN ID FALSO
-
-        // const productId = cart.products.find(prod => prod.product == idProduct)
-        // if(!productId){
-        //     cart.products.push({
-        //         product: idProduct,
-        //         quantity: 1
-        //     })
-        // } else {
-        //     productId.quantity = productId.quantity + 1
-        // }
-
         // CREACION DE LOS PRODUCTOS DENTRO DEL CARRITO CON EL ID REAL DE LOS PRODUCTOS
 
         const product = await productModel.findOne({_id: idProduct})
@@ -55,7 +50,64 @@ class CartManager {
         
         await cart.save()
 
-        console.log(cart.products)
+    }
+
+    async deleteProductCart(cid, idProduct){
+
+        // ID DEL CARRITO
+        let cart = await cartModel.findOne({ _id: cid })
+
+        // ID DEL PRODUCTO
+        const productId = await productModel.findOne({ _id: idProduct })
+
+        const p = cart.products.find(pr => pr.product.equals(productId._id))
+
+        const indexProductDelete = cart.products.findIndex(function(obj) {
+            return obj._id === p._id
+        })
+
+        if(indexProductDelete !== -1){
+            cart.products.splice(indexProductDelete, 1)
+        } else{
+
+        }
+
+        cart.save()
+    }
+
+    async deleteProductsCart(cid){
+
+        //ID DEL CARRITO
+        let cart = await cartModel.findOne({_id: cid})
+
+        cart.products = []
+
+        cart.save()
+    }
+
+    async updateCart (cid, product){
+
+        // ID DEL CARRITO
+        let cart = await cartModel.findOne({ _id: cid })
+
+        cart.products = product
+
+        cart.save()
+
+    }
+
+    async updateProductCart (cid, newQuantity, idProduct) {
+        // ID DEL CARRITO
+        let cart = await cartModel.findOne({ _id: cid })
+
+        //ID DEL PRODUCTO
+        const productId = await productModel.findOne({ _id: idProduct})
+
+        const p = cart.products.find(prod => prod.product.equals(productId._id))
+
+        p.quantity = newQuantity.quantity
+
+        cart.save()
     }
 
 }

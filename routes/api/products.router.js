@@ -4,24 +4,86 @@ const productManager = require('../../dao/managersMongo/product.manager')
 const router = Router()
 
 router.get('/', async (req, res) => {
-    const { limit } = req.query
-    const products = await productManager.getProducts()
 
-    let filtrados = []
+    let { query, page, limit, sort } = req.query
 
-    if(limit) {
-        if(limit > products.length){
-            res.send(products)
-        } else {
-            for(let i = 0; i < limit; i++){
-                filtrados.push(products[i])
-            }
-    
-            res.send(filtrados)
-        }
+
+    if(sort == 'asc'){
+        sort = 1
+    } else if( sort == 'desc'){
+        sort = -1
     }
-    else{
-        res.send(products)
+
+    if(query){
+        if (!query.startsWith('{"') || !query.endsWith('"}'))
+        res.status(400).send({error: 'Query incorrecto.'})
+
+        query = JSON.parse(query);
+    }
+    
+
+    if(sort == 1 || sort == -1 || sort == "" || sort == undefined){
+        sort
+    } else {
+        res.status(400).send({ error: 'Sort incorrecto.'})
+    }
+
+    const { docs: products, ...pageInfo } = await productManager.getProducts( page, limit, query, sort )
+
+    if(query){
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : null
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : null
+    } else if (query && sort){
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : null
+
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : null
+    } else {
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : null
+
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : null
+    }
+
+    if(sort){
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : null
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : null
+    } else if (query && sort){
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : null
+
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : null
+    } else{
+        
+        pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : null
+    
+        pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : null
+
+    }
+        
+    try {
+        res.send({
+            status: 'success',
+            payload: products,
+            totalPages: pageInfo.totalPages,
+            prevPage: pageInfo.prevPage,
+            nextPage: pageInfo.nextPage,
+            page: pageInfo.page,
+            hasPrevPage: pageInfo.hasPrevPage,
+            hasNextPage: pageInfo.hasNextPage,
+            prevLink: pageInfo.prevLink,
+            nextLink: pageInfo.nextLink
+        })
+    } catch{
+        res.send({
+            status: 'error',
+            payload: products,
+            totalPages: pageInfo.totalPages,
+            prevPage: pageInfo.prevPage,
+            nextPage: pageInfo.nextPage,
+            page: pageInfo.page,
+            hasPrevPage: pageInfo.hasPrevPage,
+            hasNextPage: pageInfo.hasNextPage,
+            prevLink: pageInfo.prevLink,
+            nextLink: pageInfo.nextLink
+        })
     }
 
 })
@@ -50,7 +112,7 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
     const { body } = req
 
-    const product = await productManager.getProducts()
+    const {docs: product} = await productManager.getProducts()
     
     if(!body.title || !body.description || !body.price || !body.category || !body.code || !body.stock){
         res.status(400).send({
