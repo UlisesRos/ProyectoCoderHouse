@@ -43,3 +43,15 @@ Configuracion del proyecto agregando los siguientes elementos:
 7. Posibilidad de editar el array de products de un carrito.
 8. Posibilidad de borrar un producto dentro de un carrito determinado, utilizando sus ID's
 9. Posibilidad de borrar un carrito de compras completo mediante su ID
+
+# Login por formulario
+
+Se levantará un sistema de login completo utilizando router + motor de plantillas Handlebars + base de datos para usuarios y sesiones.
+1. Creacion de SIGNUP, LOGIN Y LOGOUT para que el usuario pueda registrarse, ingresar y deslogearse.
+2. Todo esto se guardara en una session utilizando MongoConnect.
+3. Cuando el usuario haga LOGOUT la session de destruira.
+4. Al ingresar un usuario admin, tendra acceso a un sector que todos los demas usuarios no podran ingresar.
+5. Se creara un Handlebars para cada una de las secciones enumeradas.
+6. Si el usuario no esta logeado no podra ingresar a ningua de las paginas, siempre lo va a redirigir a la pagina de LOGIN.
+7. Cuando el usuario este logeado, tendra una seccion de perfil (profile) donde podra ver sus datos y su rol.
+    
