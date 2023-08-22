@@ -1,10 +1,10 @@
 const { Schema, model } = require('mongoose')
 const paginate = require('mongoose-paginate-v2')
 
-const shema = new Schema({
+const schema = new Schema({
     status: { type: Boolean, default: true},
     title: String,
-    description: String,
+    description: {type: String, default: 'Sin descripcion'},
     code: String,
     price: Number,
     stock: {type: Number, default: 0},
@@ -12,8 +12,8 @@ const shema = new Schema({
     thumbnail: {type: [String], default: []},
 })
 
-shema.plugin(paginate)
+schema.plugin(paginate)
 
-const productModel = model('products', shema)
+const productModel = model('products', schema)
 
 module.exports = productModel

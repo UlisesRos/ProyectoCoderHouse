@@ -6,6 +6,8 @@ const productModel = require('../models/product.model')
 class ProductManager {
 
     async addProduct ( producto ) {
+
+        console.log(producto)
         
         const product = await productModel.create( producto )
 

@@ -1,12 +1,14 @@
 const { Router } = require("express")
 const productManager = require('../dao/managersMongo/product.manager')
 const cartManager = require("../dao/managersMongo/cart.manager")
+const autenticacion = require('../middlewares/autenticacion.middlewares')
 const router = Router()
 
 
 // rutas de home de HTML
 
-router.get('/', async (req, res) => {
+router.get('/', autenticacion, async (req, res) => {
+
 
     let { query, page, limit, sort } = req.query
 
@@ -65,10 +67,10 @@ router.get('/', async (req, res) => {
 
     res.render('home', {
         title: 'Home',
-        user: {
+        user: req.user ? {
             ...req.user,
-            isAdmin: req.user.role == 'Admin'
-        },
+            isAdmin: req.user.role == 'admin'
+        } : null,
         idCart: cart[0]._id,
         products,
         pageInfo,
@@ -76,7 +78,7 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', autenticacion, async (req, res) => {
 
     let { query, page, limit, sort } = req.query
 
@@ -129,30 +131,15 @@ router.get('/realtimeproducts', async (req, res) => {
 
     res.render('realtimeproducts', {
         title: 'Products in Real Time',
-        user: {
+        user: req.user ? {
             ...req.user,
-            isAdmin: req.user.role == 'Admin'
-        },
+            isAdmin: req.user.role == 'admin'
+        } : null,
         idCart: cart[0]._id,
         products,
         pageInfo,
         style: 'realtimeproducts'
     })
-})
-
-router.get('/chatmessage', async (req, res) => {
-
-    const cart = await cartManager.getCart()
-    res.render('chatmessage', {
-        title: 'Chat',
-        user: {
-            ...req.user,
-            isAdmin: req.user.role == 'Admin'
-        },
-        idCart: cart[0]._id,
-        style: 'chatmessage'
-    })
-
 })
 
 router.get('/carts/:cid', async (req, res) => {
@@ -175,7 +162,7 @@ router.get('/carts/:cid', async (req, res) => {
         title: 'Carrito De Compras',
         user: {
             ...req.user,
-            isAdmin: req.user.role == 'Admin'
+            isAdmin: req.user.role == 'admin'
         },
         products,
         totalCarrito,

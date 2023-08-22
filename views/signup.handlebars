@@ -1,0 +1,57 @@
+<div class="uk-padding-large uk-child-width-1-1" uk-grid>
+    <h3 class="centrar" style="font-weight: bold; color: black">Registrate a nuestra Web</h3>
+    <form action="" method="post" class="centrar uk-border">
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input class="uk-input uk-border-rounded" name="first_name" type="text" placeholder="Nombre">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input name="last_name" class="uk-input uk-border-rounded" type="text" placeholder="Apellido">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input name="email" class="uk-input uk-border-rounded" type="text" placeholder="Email">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input name="age" class="uk-input uk-border-rounded" type="text" placeholder="Edad">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input name="password" class="uk-input uk-border-rounded" type="password" placeholder="Contraseña">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline">
+            <input name="password2" class="uk-input uk-border-rounded" type="password" placeholder="Confirma Contraseña">
+        </div>
+        </div>
+
+        <div class="uk-margin">
+        <div class="uk-inline" style="color: black;">
+            <span>Ya tienes cuenta? <a href="/login" style="color: blue;">Inicia sesion!</a></span>
+        </div>
+        </div>
+        
+        {{#if error}}
+        <div class="uk-margin">
+            <div class="uk-inline">
+            <span class="uk-form-danger">{{error}}</span>
+            </div>
+        </div>
+        {{/if}}
+
+        <button class="uk-button uk-button-default uk-border-rounded boton">Registrarte</button>
+    </form>
+</div>

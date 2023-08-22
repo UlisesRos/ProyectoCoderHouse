@@ -15,7 +15,7 @@ class CartManager {
 
     async getCart (){
 
-        const cart = await cartModel.find().lean()
+        const cart = await cartModel.find({}).lean()
 
         return cart
     }

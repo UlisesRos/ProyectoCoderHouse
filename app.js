@@ -6,9 +6,12 @@
     const handlebars = require('express-handlebars')
     const { Server } = require('socket.io')
     const mongoose = require('mongoose')
+    const cookieParser = require('cookie-parser')
+    const session = require('express-session')
+    const MongoStore = require('connect-mongo')
     require('dotenv').config()
 
-    const { api, home } = require('./routes')
+    const { api, home } = require('./routes/index.js')
     const SocketManager = require('./websocket')
 
     try {
@@ -20,8 +23,6 @@
         const app = express()
         const server = http.createServer(app) 
         const io = new Server(server) // SOCKET
-        
-        const { usuarioAut } = require('./middlewares')
         
         //handlebars
         app.engine('handlebars', handlebars.engine({
@@ -37,15 +38,38 @@
         app.use(express.urlencoded({ extended: true })) // Para poder parsear el body y los query params
         app.use(express.json())
         app.use('/static', express.static(path.join(__dirname + '/public')))
+        app.use(cookieParser('secret'))
+
+        app.use(session({
+            secret: 'secret',
+            resave: true,
+            saveUninitialized: true,
+            store: MongoStore.create({
+                mongoUrl: process.env.MONGO_CONNECT,
+                ttl: 60 * 30
+            })
+        }))
         
+        // middlware GLOBAL
+        app.use((req, res, next) => {
+
+            if(req.session?.user){
+                req.user = {
+                    name: req.session.user.name,
+                    role: req.session.user.role                
+                }
+            }
+        
+
+            next()
+        })
+
         // middlware del socket
         app.use((req, res, next) => {
             req.io = io
         
             next()
         })
-        
-        app.use(usuarioAut)
         
         // ruta del home
         app.use('/', home)

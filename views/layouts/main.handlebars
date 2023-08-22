@@ -20,12 +20,39 @@
                     <li class="uk-active">
                         <a href="/realtimeproducts">Products in Real Time</a>
                     </li>
+                    {{#if user}}
                     <li class="uk-active">
                         <a href="/chatmessage">Chat</a>
                     </li>
                     <li class="uk-active">
                         <a href="/carts/{{ idCart }}">Carrito de Compras</a>
                     </li>
+                    {{/if}}
+
+                    {{#if user}}
+                    <li>
+                        <a style="color: black;">Bienvenido, {{user.name}}!</a>
+                        <div class="uk-navbar-dropdown uk-border-rounded">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li>
+                            <a href="/profile">Perfil</a>
+                            </li>
+                            {{#if user.isAdmin}}
+                            <li>
+                                <a href="/admin/admin">Admin</a>
+                            </li>
+                            {{/if}}
+                            <li>
+                            <a href="/logout">Logout</a>
+                            </li>
+                        </ul>
+                        </div>
+                    </li>
+                    {{else}}
+                    <li>
+                        <a href="/login" style="color: black;">Inicia Sesion</a>
+                    </li>    
+                    {{/if}}
                 </ul>
             </div>
         </nav>

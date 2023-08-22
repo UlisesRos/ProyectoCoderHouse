@@ -15,8 +15,6 @@ const appendMessageElement = (user, time, msg) => {
     messagesEl.appendChild(div)
 
     // Encierro en un setTimeOut para que se actualice el scroll
-
-    console.log(messagesEl.scrollHeight)
     
     setTimeout(() => {
         messagesEl.scrollTo(0, messagesEl.scrollHeight)
@@ -73,6 +71,7 @@ Swal.fire({
     },
     allowOutsideClick: false
 }).then(({ value }) => {
+
     userName = value
     socket.emit('user', { user: userName, action: true})
 
