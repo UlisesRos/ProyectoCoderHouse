@@ -4,37 +4,37 @@
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input class="uk-input uk-border-rounded" name="first_name" type="text" placeholder="Nombre">
+            <input class="uk-input uk-border-rounded" name="first_name" type="text" placeholder="Nombre" required>
         </div>
         </div>
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input name="last_name" class="uk-input uk-border-rounded" type="text" placeholder="Apellido">
+            <input name="last_name" class="uk-input uk-border-rounded" type="text" placeholder="Apellido" required>
         </div>
         </div>
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input name="email" class="uk-input uk-border-rounded" type="text" placeholder="Email">
+            <input name="email" class="uk-input uk-border-rounded" type="text" placeholder="Email" required>
         </div>
         </div>
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input name="age" class="uk-input uk-border-rounded" type="text" placeholder="Edad">
+            <input name="age" class="uk-input uk-border-rounded" type="text" placeholder="Edad" required>
         </div>
         </div>
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input name="password" class="uk-input uk-border-rounded" type="password" placeholder="Contraseña">
+            <input name="password" class="uk-input uk-border-rounded" type="password" placeholder="Contraseña" required>
         </div>
         </div>
 
         <div class="uk-margin">
         <div class="uk-inline">
-            <input name="password2" class="uk-input uk-border-rounded" type="password" placeholder="Confirma Contraseña">
+            <input name="password2" class="uk-input uk-border-rounded" type="password" placeholder="Confirma Contraseña" required>
         </div>
         </div>
 
@@ -47,7 +47,7 @@
         {{#if error}}
         <div class="uk-margin">
             <div class="uk-inline">
-            <span class="uk-form-danger">{{error}}</span>
+            <span class="uk-form-danger" style="font-weight: bold;">{{error}}</span>
             </div>
         </div>
         {{/if}}

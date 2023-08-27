@@ -8,10 +8,10 @@ const { hashPassword, isValidPassword } = require('../utils/password')
 
 const LocalStrategy = local.Strategy
 
-const signup = async ( req, eemail, password, done ) => {
+const signup = async ( req, email, password, done ) => {
     const { password: _password, password2: _password2, ...user } = req.body
 
-    const _user = await userManager.getUserByEmail( eemail )
+    const _user = await userManager.getUserByEmail( email )
 
     if(_user){
         console.log('El usuario ya existe.')

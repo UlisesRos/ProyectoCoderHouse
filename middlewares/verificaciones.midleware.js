@@ -18,7 +18,7 @@ async function verificacionLogin(req, res, next){
             })
         }
         
-        const { password: _password, ...user } = _user
+        const { password: _password } = _user
 
         if(!password) {
             return res.render('login', {
@@ -46,42 +46,27 @@ async function verificacionLogin(req, res, next){
 }
 
 async function verificacionSignup (req,res,next) {
+
     const user = req.body
 
-    // Verificamos si el usuario existe a traves del email
-    const userEmail = await userManager.getUserByEmail(user.email)
-
-    if(userEmail){
-        return res.render('signup', {
-            error: 'El Email ingresado ya existe.',
-            style: 'signup'
-        })
-    }
-
-    if(user.password !== user.password2) {
-        return res.render('signup', {
-            error: 'Las contraseñas no coinciden.',
-            style: 'signup'
-        })
-    }
-
-    // Creaccion del usuario
     try {
 
-        const newUser = await userManager.addUser({
-            ...user,
-            password: hashPassword(user.password)
-        })
-        
-        req.session.user = {
-            name: newUser.first_name,
-            id: newUser._id,
-            ...newUser._doc
+        // Verificamos si el usuario existe a traves del email
+        const userEmail = await userManager.getUserByEmail(user.email)
+
+        if(userEmail){
+            return res.render('signup', {
+                error: 'El Email ingresado ya existe.',
+                style: 'signup'
+            })
         }
 
-        req.session.save((err) => {
-            res.redirect('/')
-        })
+        if(user.password !== user.password2) {
+            return res.render('signup', {
+                error: 'Las contraseñas no coinciden.',
+                style: 'signup'
+            })
+        }
 
     } catch (error) {
         return res.render('signup', {
