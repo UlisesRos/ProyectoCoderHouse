@@ -160,10 +160,10 @@ router.get('/carts/:cid', async (req, res) => {
 
     res.render('carts', {   
         title: 'Carrito De Compras',
-        user: {
+        user:  req.user ? {
             ...req.user,
             isAdmin: req.user.role == 'admin'
-        },
+        } : null,
         products,
         totalCarrito,
         style: 'carts'

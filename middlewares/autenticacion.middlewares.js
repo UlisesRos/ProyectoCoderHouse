@@ -1,6 +1,6 @@
 function autenticacion(req, res, next){
 
-    if(req.user) {
+    if(req.isAuthenticated()) {
         next()
         return
     }

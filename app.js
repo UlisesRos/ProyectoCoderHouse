@@ -9,10 +9,13 @@
     const cookieParser = require('cookie-parser')
     const session = require('express-session')
     const MongoStore = require('connect-mongo')
+    const passport = require('passport')
     require('dotenv').config()
 
     const { api, home } = require('./routes/index.js')
     const SocketManager = require('./websocket')
+    const initPassportLocal = require('./config/passport.init.js')
+    const { isValidPassword } = require('./utils/password.js')
 
     try {
         
@@ -49,15 +52,21 @@
                 ttl: 60 * 30
             })
         }))
+
+        //Registramos los middlewares de passport
+        initPassportLocal()
+        app.use(passport.initialize())
+        app.use(passport.session())
         
-        // middlware GLOBAL
+        //middlware GLOBAL
         app.use((req, res, next) => {
 
-            if(req.session?.user){
-                req.user = {
-                    name: req.session.user.name,
-                    role: req.session.user.role                
+            if(req.user){  
+
+                if(req.user.email == "adminCoder@coder.com" && isValidPassword('adminCod3r123', req.user.password)){
+                    req.user.role = 'admin'
                 }
+
             }
         
 
