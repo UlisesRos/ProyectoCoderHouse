@@ -54,4 +54,10 @@ Se levantará un sistema de login completo utilizando router + motor de plantill
 5. Se creara un Handlebars para cada una de las secciones enumeradas.
 6. Si el usuario no esta logeado no podra ingresar a ningua de las paginas, siempre lo va a redirigir a la pagina de LOGIN.
 7. Cuando el usuario este logeado, tendra una seccion de perfil (profile) donde podra ver sus datos y su rol.
-    
+
+# Editando nuestro login
+
+Se editaran los siguientes puntos de nuestro login:
+1. Se agregara un sistema de hasheo de contraseña utilizando bcrypt.
+2. Se implementara passport tanto para el registro como para el acceso de nuestra pagina.
+3. Se implementara un metodo de autenticacion para ingresar mediante GITHUB. 
