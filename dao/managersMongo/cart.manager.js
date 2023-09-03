@@ -3,12 +3,13 @@
 // Importacion del modelo con mongo
 const cartModel = require('../models/cart.model')
 const productModel = require('../models/product.model')
+const userManager = require('../managersMongo/user.manager')
 
 class CartManager {
 
     async addCart () {
 
-        const cart = await cartModel.create( { products: []} )
+        const cart = await cartModel.create( { user: undefined, products: [] } )
 
         return cart
     }

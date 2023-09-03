@@ -6,7 +6,7 @@ const router = Router()
 
 // Creacion de un nuevo CARRITO
 router.post('/', async (req, res) => {
-
+    
     await cartManager.addCart()
     res.status(201).send({Created: 'El carrito fue creado con exito!'})
 

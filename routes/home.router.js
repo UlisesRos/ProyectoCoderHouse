@@ -63,7 +63,7 @@ router.get('/', autenticacion, async (req, res) => {
 
     }
 
-    const cart = await cartManager.getCart()
+    const cart = await cartManager.getCartById(req.user.cart._id)
 
     res.render('home', {
         title: 'Home',
@@ -71,7 +71,7 @@ router.get('/', autenticacion, async (req, res) => {
             ...req.user,
             isAdmin: req.user.role == 'admin'
         } : null,
-        idCart: cart[0]._id,
+        idCart: cart._id,
         products,
         pageInfo,
         style: 'home'

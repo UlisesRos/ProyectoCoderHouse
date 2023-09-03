@@ -49,7 +49,7 @@
             saveUninitialized: true,
             store: MongoStore.create({
                 mongoUrl: process.env.MONGO_CONNECT,
-                ttl: 60 * 30
+                ttl: 60 * 20
             })
         }))
 

@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
         title: 'Chat',
         user: {
             ...req.user,
-            isAdmin: req.user.role == 'Admin'
+            isAdmin: req.user.role == 'admin'
         },
         idCart: cart[0]._id,
         style: 'chatmessage'

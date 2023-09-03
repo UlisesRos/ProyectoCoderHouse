@@ -6,7 +6,8 @@ const schema = new Schema({
     email: { type: String, index: true},
     role: {type: String, default: 'Customer'},
     age: Number,
-    password: String
+    password: String,
+    cart: { type: Schema.Types.ObjectId, ref: 'carts' }
 })
 
 const userModel = model('users', schema)

@@ -1,5 +1,5 @@
 const userManager = require('../dao/managersMongo/user.manager')
-const { hashPassword, isValidPassword } = require('../utils/password')
+const { isValidPassword } = require('../utils/password')
 
 
 async function verificacionLogin(req, res, next){
@@ -7,6 +7,15 @@ async function verificacionLogin(req, res, next){
     const { email, password } = req.body
 
     try {
+
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        if(!regex.test(email)){
+            return res.render('login', {
+                error: 'Formato de email incorrecto.',
+                style: 'signup'
+            })
+        }
 
         const _user = await userManager.getUserByEmail(email)
 
@@ -49,9 +58,20 @@ async function verificacionSignup (req,res,next) {
 
     const user = req.body
 
+    
     try {
+        // Verificamos que el email ingresado tenga el formato de email.
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+        if(!regex.test(user.email)){
+            return res.render('signup', {
+                error: 'Formato de email incorrecto.',
+                style: 'signup'
+            })
+        }
 
         // Verificamos si el usuario existe a traves del email
+
         const userEmail = await userManager.getUserByEmail(user.email)
 
         if(userEmail){
