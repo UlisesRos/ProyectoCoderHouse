@@ -1,22 +1,8 @@
 const { Router } = require('express')
-const cartManager = require('./../dao/managersMongo/cart.manager')
+const cartController = require('../controllers/chat.controllers')
 
 const router = Router()
 
-router.get('/', async (req, res) => {
-
-    const cart = await cartManager.getCart()
-
-    res.render('chatmessage', {
-        title: 'Chat',
-        user: {
-            ...req.user,
-            isAdmin: req.user.role == 'admin'
-        },
-        idCart: cart[0]._id,
-        style: 'chatmessage'
-    })
-
-})
+router.get('/', cartController.getChat)
 
 module.exports = router

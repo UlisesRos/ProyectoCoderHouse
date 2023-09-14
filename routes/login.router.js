@@ -1,11 +1,11 @@
 const { Router } = require('express')
 const passport = require('passport')
 const userManager = require('./../dao/managersMongo/user.manager')
-const cartManager = require('./../dao/managersMongo/cart.manager')
 const autenticacion = require('../middlewares/autenticacion.middlewares.js')
 const {verificacionLogin, verificacionSignup} = require('../middlewares/verificaciones.midleware')
 const { hashPassword, isValidPassword } = require('../utils/password')
-const { GITHUB_STRATEGY_NAME } = require('../config/config.password')
+const { GITHUB_STRATEGY_NAME } = require('../config/config')
+const loginControllers = require('../controllers/login.controllers')
 
 const router = Router()
 
@@ -151,109 +151,19 @@ const logout = (req, res) => {
     })
 }
 
-const resetpassword =  async (req, res) => {
-    const { email, password1, password2 } = req.body
-
-    const user = await userManager.getUserByEmail( email )
-
-    if(!user){
-        return res.render('resetpassword', {
-            error: 'El usuario no existe',
-            style: 'login'
-        })
-    }
-
-    if(password1 !== password2) {
-        return res.render('resetpassword', {
-            error: 'Las contraseñas no coinciden.',
-            style: 'login'
-        })
-    }
-
-    try {
-        
-        await userManager.updateUser(user._id, {
-            ...user,
-            password: hashPassword(password1)
-        })
-
-        res.redirect('/login')
-
-    } catch (error) {
-        console.log(error)
-        return res.render('resetpassword', {
-            error: 'Ha ocurrido un error',
-            style: 'login'
-        })
-    }
-
-}
-
 // Rutas de Login
 
-router.get('/signup', (req, res) => {
-
-    res.render('signup',{
-        style: 'signup'
-    })
-
-})
-router.get('/login', (req, res) => {
-
-    res.render('login', {   
-        style: 'login'
-    })
-
-})
-router.get('/profile', autenticacion, async (req, res) => {
-
-    const cart = await cartManager.getCart()
-    res.render('profile', {
-        ...req.user,
-        style: 'login',
-        user: req.user ? {
-            ...req.user,
-            isAdmin: req.user.role == 'admin'
-        } : null,
-        idCart: cart[0]._id
-    })
-})
-router.get('/resetpassword', (req, res) => {
-    res.render('resetpassword', {
-        style: 'login'
-    })
-})
-router.get('/logout', autenticacion, (req, res) => {
-    const { first_name, last_name } = req.user
-
-    req.logOut((err) => {
-        if(!err){
-            res.render('logout', {
-                name: `${first_name} ${last_name}`,
-                style: 'login'
-            })
-        }
-    })
-})
+router.get('/signup', loginControllers.getSignup)
+router.get('/login', loginControllers.getLogin)
+router.get('/profile', autenticacion, loginControllers.getProfile)
+router.get('/resetpassword', loginControllers.getResetpassword)
+router.get('/logout', autenticacion, loginControllers.getLogout)
 
 // RUTAS DE GITHUB
 
 router.get('/github', passport.authenticate(GITHUB_STRATEGY_NAME), (req, res) => {})
 
-router.get('/githubSessions', passport.authenticate(GITHUB_STRATEGY_NAME), (req, res) => {
-    const user = req.user
-
-    req.session.user = {
-        id: user.id,
-        name: user.first_name,
-        role: user?.role ?? "Customer",
-        email: user.email
-    }
-
-
-    res.redirect('/')
-
-})
+router.get('/githubSessions', passport.authenticate(GITHUB_STRATEGY_NAME), loginControllers.getGithubSession)
 
 router.post('/signup', verificacionSignup, passport.authenticate('local-signup', {
     successRedirect: '/profile',
@@ -263,6 +173,6 @@ router.post('/login', verificacionLogin, passport.authenticate('local-login', {
     successRedirect: '/',
     failureRedirect: '/login'
 }))
-router.post('/resetpassword', resetpassword)
+router.post('/resetpassword', loginControllers.postResetpassword)
 
 module.exports = router

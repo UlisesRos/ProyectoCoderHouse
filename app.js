@@ -1,16 +1,18 @@
 (async () => {
+    require('dotenv').config()
+    
     const http = require('http')
     const path = require('path')
 
     const express = require('express')
     const handlebars = require('express-handlebars')
     const { Server } = require('socket.io')
-    const mongoose = require('mongoose')
+    const mongoDB = require('./services/mongo.db')
     const cookieParser = require('cookie-parser')
     const session = require('express-session')
     const MongoStore = require('connect-mongo')
     const passport = require('passport')
-    require('dotenv').config()
+    const { PORT, HOST, MONGO_CONNECT, ADMIN_EMAIL, ADMIN_PASSWORD } = require('./config/config')
 
     const { api, home } = require('./routes/index.js')
     const SocketManager = require('./websocket')
@@ -21,7 +23,7 @@
         
         // conectar la base de datos antes de levantar el server
         
-        await mongoose.connect(process.env.MONGO_CONNECT) // Variable de entorno: mongodb+srv://ulisesros70:Ulises12@cluster1.tvi8kiv.mongodb.net/ecommerce?retryWrites=true&w=majority
+        await mongoDB.connect()
         
         const app = express()
         const server = http.createServer(app) 
@@ -48,7 +50,7 @@
             resave: true,
             saveUninitialized: true,
             store: MongoStore.create({
-                mongoUrl: process.env.MONGO_CONNECT,
+                mongoUrl: MONGO_CONNECT,
                 ttl: 60 * 20
             })
         }))
@@ -63,7 +65,7 @@
 
             if(req.user){  
 
-                if(req.user.email == "adminCoder@coder.com" && isValidPassword('adminCod3r123', req.user.password)){
+                if(req.user.email == ADMIN_EMAIL && isValidPassword(ADMIN_PASSWORD, req.user.password)){
                     req.user.role = 'admin'
                 }
 
@@ -87,14 +89,11 @@
         app.use('/api', api)
         
         // WEB SOCKET
-        
         io.on('connection', SocketManager)
         
         
-        const port = process.env.PORT // Variable de entorno: 8080
-        
-        server.listen(port, () => {
-            console.log(`Servidor leyendose desde http://localhost:${port}`)
+        server.listen(PORT, () => {
+            console.log(`Servidor leyendose desde http://${HOST}:${PORT}`)
         })
 
         console.log('Se ha conectado a la base de datos de MongoDb')

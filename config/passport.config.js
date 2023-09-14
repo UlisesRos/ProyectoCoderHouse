@@ -1,5 +1,4 @@
 // Generamos nuestras estrategias de passport
-
 const local = require('passport-local')
 
 const userManager = require('../dao/managersMongo/user.manager')
