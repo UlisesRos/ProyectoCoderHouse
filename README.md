@@ -60,4 +60,9 @@ Se levantará un sistema de login completo utilizando router + motor de plantill
 Se editaran los siguientes puntos de nuestro login:
 1. Se agregara un sistema de hasheo de contraseña utilizando bcrypt.
 2. Se implementara passport tanto para el registro como para el acceso de nuestra pagina.
-3. Se implementara un metodo de autenticacion para ingresar mediante GITHUB. 
+3. Se implementara un metodo de autenticacion para ingresar mediante GITHUB.
+
+# Reestructura de nuestro servidor
+1. Ordenamos nuestro proyecto por capas con el patron de diseño MVC
+2. Creamos una carpeta Services donde metimos nuestro MONGODB y creamos un Singleton para conectaronos a la Base de Datos.
+3. Metimos el usuario y el password del ADMIN dentro del .env para que no sea visible.
