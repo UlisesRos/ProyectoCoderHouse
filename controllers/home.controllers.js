@@ -65,7 +65,79 @@ class HomeController {
             title: 'Home',
             user: req.user ? {
                 ...req.user,
-                isAdmin: req.user.role == 'admin'
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
+            } : null,
+            idCart: cart._id,
+            products,
+            pageInfo,
+            style: 'home'
+        })
+    }
+
+    async postHome (req, res) {
+        let { sort } = req.body
+        let { query, page, limit } = req.query
+    
+        if(sort == 'asc'){
+            sort = 1
+        } else if( sort == 'desc'){
+            sort = -1
+        }
+    
+        if(query){
+            if (!query.startsWith('{"') || !query.endsWith('"}'))
+            res.status(400).send({error: 'Query incorrecto.'})
+    
+            query = JSON.parse(query);
+        }
+    
+        if(sort == 1 || sort == -1 || sort == "" || sort == undefined){
+            sort
+        } else {
+            res.status(400).send({ error: 'Sort incorrecto.'})
+        }
+    
+        const { docs: products, ...pageInfo } = await productManager.getProducts( page, limit, query, sort )
+    
+        // CREACION DE LOS BOTONES SIGUIENTES Y ANTERIOR
+    
+        if(query){
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
+        } else if (query && sort){
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+    
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+        } else {
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+    
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+        }
+    
+        if(sort){
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+        } else if (query && sort){
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+    
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+        } else{
+            
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+        
+            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+    
+        }
+        
+        const cart = await cartManager.getCartById(req.user.cart._id)
+    
+        res.render('home', {
+            title: 'Home',
+            user: req.user ? {
+                ...req.user,
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
             } : null,
             idCart: cart._id,
             products,
@@ -130,7 +202,8 @@ class HomeController {
             title: 'Products in Real Time',
             user: req.user ? {
                 ...req.user,
-                isAdmin: req.user.role == 'admin'
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
             } : null,
             idCart: cart._id,
             products,
@@ -160,7 +233,8 @@ class HomeController {
             title: 'Carrito De Compras',
             user:  req.user ? {
                 ...req.user,
-                isAdmin: req.user.role == 'admin'
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
             } : null,
             products,
             totalCarrito,

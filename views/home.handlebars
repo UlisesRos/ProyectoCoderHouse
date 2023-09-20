@@ -1,3 +1,15 @@
+<div>
+    <form action="" method="post">
+        <div class="uk-margin">
+            <div class="uk-inline order">
+                <label for="sort">Ordenar por precio</label>
+                <input id="sort" name="sort" class="uk-input uk-border-rounded" type="text" placeholder="asc o desc">
+            </div>
+        </div>
+        <button class="uk-button uk-button-default uk-border-rounded boton">Enviar</button>
+    </form>
+</div>
+
 <div class="uk-padding-large uk-child-width-1-1" uk-grid style="color: black; font-weight: bold">
     {{#if pageInfo.hasPrevPage}}
         <a href="{{pageInfo.prevLink}}" style="color: blue;"> ← Anterior </a>
@@ -5,10 +17,11 @@
     &nbsp;
     {{pageInfo.page}}
     &nbsp;
-        {{#if pageInfo.hasNextPage}}
-            <a href="{{pageInfo.nextLink}}" style="color: blue;"> → Siguiente</a>
-        {{/if}}
+    {{#if pageInfo.hasNextPage}}
+        <a href="{{pageInfo.nextLink}}" style="color: blue;"> → Siguiente</a>
+    {{/if}}
 </div>
+
 
 <div class="uk-child-width-1-4@m" uk-grid>
     {{#each products}}
@@ -23,7 +36,7 @@
                     <p>{{this.description}}</p>
                     <p>{{this.stock}}</p>
                     <p> {{this.category}} </p>
-                    <button class="uk-button uk-button-secondary uk-button-small uk-border-rounded" >Agregar al carrito</button>
+                    <button onclick="addToCart(`{{this.id}}`)" class="uk-button uk-button-secondary uk-button-small uk-border-rounded" >Agregar al carrito</button>
                 </div>
             </div>
         </div>

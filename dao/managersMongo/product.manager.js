@@ -6,8 +6,6 @@ const productModel = require('../models/product.model')
 class ProductManager {
 
     async addProduct ( producto ) {
-
-        console.log(producto)
         
         const product = await productModel.create( producto )
 
@@ -69,7 +67,6 @@ class ProductManager {
 
     }
     
-
     async getProductById ( id ) {
         const products = await productModel.find({ _id: id })
 

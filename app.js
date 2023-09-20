@@ -64,29 +64,23 @@
         app.use((req, res, next) => {
 
             if(req.user){  
-
                 if(req.user.email == ADMIN_EMAIL && isValidPassword(ADMIN_PASSWORD, req.user.password)){
                     req.user.role = 'admin'
                 }
-
             }
-        
-
             next()
         })
 
-        // middlware del socket
-        app.use((req, res, next) => {
-            req.io = io
-        
-            next()
-        })
-        
         // ruta del home
         app.use('/', home)
         
         // ruta de las api
-        app.use('/api', api)
+        app.use('/api', (req, res, next) => {
+            req.io = io
+
+            next()
+        }, api)
+        
         
         // WEB SOCKET
         io.on('connection', SocketManager)

@@ -1,9 +1,16 @@
 const chatMessageManager = require('../dao/managersMongo/chat.message.manager')
+const cartManager = require('../dao/managersMongo/cart.manager')
 
 async function SocketManager (socket) {
+    
     console.log(`Usuario conectado: ${socket.id}`)
 
     const userOnline = {}
+
+    // Carrito de compras
+    socket.on('productCart', (productId) => {
+        cartManager.addProductCart('64f65187ab879745a9aa0be9', productId)
+    })
 
     // logica de los mensajes
     // obtengo todos los mensajes de la base de datos

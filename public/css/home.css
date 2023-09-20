@@ -13,3 +13,26 @@
     text-align: center;
     border-radius: 20px;
 }
+
+.boton {
+    background-color: black;
+    color: white;
+    border: solid 1px white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.boton:hover {
+    background-color: white;
+    color: black;
+}
+
+.order {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    width: 15%;
+}
+
+.order label {
+    margin: 10px;
+}

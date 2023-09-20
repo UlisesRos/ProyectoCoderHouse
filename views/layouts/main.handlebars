@@ -20,7 +20,7 @@
                     <li class="uk-active">
                         <a href="/realtimeproducts">Products in Real Time</a>
                     </li>
-                    {{#if user}}
+                    {{#if user.isPublic}}
                     <li class="uk-active">
                         <a href="/chatmessage">Chat</a>
                     </li>
@@ -39,7 +39,13 @@
                             </li>
                             {{#if user.isAdmin}}
                             <li>
-                                <a href="/admin/admin">Admin</a>
+                                <a href="/admin/admin">Admin - Agregar Producto</a>
+                            </li>
+                            <li>
+                                <a href="/admin/admin">Admin - Eliminar Producto</a>
+                            </li>
+                            <li>
+                                <a href="/admin/admin">Admin - Editar Producto</a>
                             </li>
                             {{/if}}
                             <li>
@@ -65,6 +71,8 @@
             {{{body}}}
         </div>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/static/js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
   </body>

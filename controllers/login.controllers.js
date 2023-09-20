@@ -30,7 +30,8 @@ class LoginController {
             style: 'login',
             user: req.user ? {
                 ...req.user,
-                isAdmin: req.user.role == 'admin'
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
             } : null,
             idCart: cart._id
         })

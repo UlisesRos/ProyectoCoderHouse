@@ -3,7 +3,6 @@
 // Importacion del modelo con mongo
 const cartModel = require('../models/cart.model')
 const productModel = require('../models/product.model')
-const userManager = require('../managersMongo/user.manager')
 
 class CartManager {
 

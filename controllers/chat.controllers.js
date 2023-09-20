@@ -10,7 +10,8 @@ class CartController {
             title: 'Chat',
             user: {
                 ...req.user,
-                isAdmin: req.user.role == 'admin'
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
             },
             idCart: cart._id,
             style: 'chatmessage'
