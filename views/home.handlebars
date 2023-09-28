@@ -34,8 +34,8 @@
                     <h3 class="uk-card-title" style="font-weight: bold;">{{ this.title }}</h3>
                     <h5>${{this.price}}</h5>
                     <p>{{this.description}}</p>
-                    <p>{{this.stock}}</p>
-                    <p> {{this.category}} </p>
+                    <p>Stock: {{this.stock}} unidades</p>
+                    <p><span class="uk-badge" style="padding: 10px;">{{this.category}}</span></p>
                     {{#if this.stock}}
                     {{#if ../user.isPublic}}
                         <button onclick="addToCart(`{{../idCart}},{{this.id}}`)" class="uk-button uk-button-secondary uk-button-small uk-border-rounded boton" >Agregar al carrito</button>

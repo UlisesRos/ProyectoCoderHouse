@@ -1,5 +1,3 @@
-console.log('Bienvenidos a WebSocket')
-
 const d = document
 
 const socket = io()

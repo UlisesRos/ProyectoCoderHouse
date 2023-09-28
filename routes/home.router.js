@@ -11,8 +11,8 @@ router.post('/', homeControllers.postHome)
 
 router.get('/realtimeproducts', autenticacion, homeControllers.getRealTimeProducts)
 
-router.get('/:cid/purchase', homeControllers.getOrderHome)
+router.get('/:cid/purchase', autenticacion, homeControllers.getOrderHome)
 
-router.get('/carts/:cid', homeControllers.getCartHome)
+router.get('/carts/:cid', autenticacion, homeControllers.getCartHome)
 
 module.exports = router

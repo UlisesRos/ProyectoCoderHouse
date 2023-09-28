@@ -5,8 +5,6 @@ const cartManager = ManagerFactory.getManagerInstance('carts')
 const productManager = ManagerFactory.getManagerInstance('products')
 
 async function SocketManager (socket) {
-    
-    console.log(`Usuario conectado: ${socket.id}`)
 
     const userOnline = {}
 
@@ -52,7 +50,6 @@ async function SocketManager (socket) {
     })
 
     socket.on('disconnect', () => {
-        console.log('Usuario desconectado')
         socket.broadcast.emit('user', {
             user: userOnline[socket.id],
             action: false

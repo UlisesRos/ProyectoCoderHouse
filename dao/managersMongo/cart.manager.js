@@ -61,8 +61,6 @@ class CartManager {
         const productId = await productModel.findOne({ _id: idProduct })
 
         const productQ = cart.products.find(pr => pr.product == idProduct)
-
-        console.log(productQ)
         
         if(productQ.quantity > 1){
             productQ.quantity = productQ.quantity - 1
