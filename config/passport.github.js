@@ -1,6 +1,7 @@
 const GithubStrategy = require('passport-github2')
-const userManager = require('../dao/managersMongo/user.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+const userManager = ManagerFactory.getManagerInstance('users')
+const cartManager = ManagerFactory.getManagerInstance('carts')
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, PORT, HOST, GITHUB_STRATEGY_NAME } = require('./config')
 
 const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: `http://${HOST}:${PORT}/githubSessions` }

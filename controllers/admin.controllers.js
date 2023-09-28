@@ -1,5 +1,7 @@
-const productManager = require('../dao/managersMongo/product.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const productManager = ManagerFactory.getManagerInstance('products')
+const cartManager = ManagerFactory.getManagerInstance('carts')
 
 class AdminController {
 
@@ -19,6 +21,19 @@ class AdminController {
         })
     
     }
+    
+    async getAdminEditarProducto (req, res) {
+
+        res.render('admin/editarProducto', {
+            title: 'Editar un producto',
+            style: 'admin',
+            user: req.user ? {
+                ...req.user,
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
+            } : null
+        })
+    }
 
     // Creacion de un nuevo producto solo por el ADMIN
     async addProductAdmin (req, res) {
@@ -26,6 +41,17 @@ class AdminController {
         await productManager.addProduct(req.body)
     
         res.redirect('/admin/admin')
+    }
+
+    // Editar un producto existente solo por el ADMIN
+    async updateProductAdmin (req, res) {
+
+        const {id, ...body} = req.body
+
+        productManager.updateProduct(id, body)
+
+        res.redirect('/')
+
     }
 }
 

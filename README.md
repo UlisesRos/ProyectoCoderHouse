@@ -66,3 +66,12 @@ Se editaran los siguientes puntos de nuestro login:
 1. Ordenamos nuestro proyecto por capas con el patron de diseño MVC
 2. Creamos una carpeta Services donde metimos nuestro MONGODB y creamos un Singleton para conectaronos a la Base de Datos.
 3. Metimos el usuario y el password del ADMIN dentro del .env para que no sea visible.
+
+# Mejorando la arquitectura del servidor
+1. Modificamos nuestra capa de persistencia con el metodo FACTORY. Esto nos permitira pasar de la utilizacion de MONGO a FILE de forma simple.
+2. Implementamos el patron REPOSITORY para trabajar con el DAO en la logica de negocio.
+3. Realizamos un middleware de autorizacion, que nos permite delimitar el acceso a diferentes endpoints dependiendo de si el usuario es un 'admin' o un 'Customer'. Solo los 'admin' podran crear, actualizar y eliminar un producto, y solo los 'Customer' podran enviar mensajes al chat y agregar productos al carrito.
+4. Creamos un modelo ORDER el cual nos permitira crear nuestros ticket para las ordenes de compra.
+5. Implementamos una ruta /:cid/purchase la cual permitira finalizar con el proceso de compra de dicho carrito. Esta corrobora el stock y la cantidad solicitada por el usuario y realiza las actualizaciones correspondientes del stock en nuestra base de dato, permitiendo al usuario comprar la cantidad de productos que se encuentran disponibles. Los productos que no pueden ser comprados por no tener el stock, se almacenaran en un array y quedaran en el carrito de compras del cliente.
+6. Al finalizar la compra, se le enviara un mail al usuario con el ticket de compra y agraciendole por comprar.
+7. Se modificaron y se agregaron nuevas vistas en handlebars para mejorar la parte del front y permitir al usuario distintas funcionalidades, dependiedo de su ROL en la pagina.

@@ -60,19 +60,27 @@ class CartManager {
         // ID DEL PRODUCTO
         const productId = await productModel.findOne({ _id: idProduct })
 
-        const p = cart.products.find(pr => pr.product.equals(productId._id))
+        const productQ = cart.products.find(pr => pr.product == idProduct)
 
-        const indexProductDelete = cart.products.findIndex(function(obj) {
-            return obj._id === p._id
-        })
+        console.log(productQ)
+        
+        if(productQ.quantity > 1){
+            productQ.quantity = productQ.quantity - 1
 
-        if(indexProductDelete !== -1){
-            cart.products.splice(indexProductDelete, 1)
-        } else{
-
+            cart.save()
+        } else {
+            const p = cart.products.find(pr => pr.product.equals(productId._id))
+    
+            const indexProductDelete = cart.products.findIndex(function(obj) {
+                return obj._id === p._id
+            })
+    
+            if(indexProductDelete !== -1){
+                cart.products.splice(indexProductDelete, 1)
+            }
+    
+            cart.save()
         }
-
-        cart.save()
     }
 
     async deleteProductsCart(cid){

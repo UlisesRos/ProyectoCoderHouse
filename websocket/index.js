@@ -1,5 +1,8 @@
-const chatMessageManager = require('../dao/managersMongo/chat.message.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const chatMessageManager = ManagerFactory.getManagerInstance('chatMessages')
+const cartManager = ManagerFactory.getManagerInstance('carts')
+const productManager = ManagerFactory.getManagerInstance('products')
 
 async function SocketManager (socket) {
     
@@ -8,8 +11,24 @@ async function SocketManager (socket) {
     const userOnline = {}
 
     // Carrito de compras
-    socket.on('productCart', (productId) => {
-        cartManager.addProductCart('64f65187ab879745a9aa0be9', productId)
+    socket.on('productCart', (cartId) => {
+        const cartAndProductId = cartId.split(",")
+
+        cartManager.addProductCart(cartAndProductId[0], cartAndProductId[1])
+    })
+
+    // Elimnar producto del carrito de compras
+    socket.on('deleteProductCart', (productId) => {
+        const cartAndProductId = productId.split(",")
+        cartManager.deleteProductCart(cartAndProductId[0], cartAndProductId[1])
+
+    })
+
+    // Eliminar producto por el ADMIN
+    socket.on('deleteProduct', (productId) => {
+
+        productManager.deleteProduct(productId)
+
     })
 
     // logica de los mensajes

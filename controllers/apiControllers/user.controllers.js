@@ -1,4 +1,6 @@
-const userManager = require('../../dao/managersMongo/user.manager')
+const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+
+const userManager = ManagerFactory.getManagerInstance('users')
 
 class UserController {
 

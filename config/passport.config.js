@@ -1,8 +1,9 @@
 // Generamos nuestras estrategias de passport
 const local = require('passport-local')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
 
-const userManager = require('../dao/managersMongo/user.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const userManager = ManagerFactory.getManagerInstance('users')
+const cartManager = ManagerFactory.getManagerInstance('carts')
 const { hashPassword, isValidPassword } = require('../utils/password')
 
 const LocalStrategy = local.Strategy

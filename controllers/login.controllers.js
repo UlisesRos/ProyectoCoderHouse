@@ -1,5 +1,7 @@
-const userManager = require('../dao/managersMongo/user.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const userManager = ManagerFactory.getManagerInstance('users')
+const cartManager = ManagerFactory.getManagerInstance('carts')
 
 class LoginController {
 

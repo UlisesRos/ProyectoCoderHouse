@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const productController = require('../../controllers/apiControllers/products.controllers')
+const { policiesAdmin } = require('../../middlewares/policies.middleware')
 
 const router = Router()
 
@@ -7,10 +8,10 @@ router.get('/', productController.getProducts)
 
 router.get('/:pid', productController.getProductById)
 
-router.post('/', productController.addProduct)
+router.post('/', policiesAdmin, productController.addProduct)
 
-router.put('/:pid', productController.updateProduct)
+router.put('/:pid', policiesAdmin, productController.updateProduct)
 
-router.delete('/:pid', productController.deleteProduct)
+router.delete('/:pid', policiesAdmin, productController.deleteProduct)
 
 module.exports = router

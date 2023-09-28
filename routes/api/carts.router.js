@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const cartController = require('../../controllers/apiControllers/carts.controllers')
+const { policiesCustomer } = require('../../middlewares/policies.middleware')
 
 const router = Router()
 
@@ -12,7 +13,7 @@ router.get('/', cartController.getCart)
 
 router.get('/:cid', cartController.getCartById)
 
-router.post('/:cid/products/:idProduct', cartController.addProductCart)
+router.post('/:cid/products/:idProduct', policiesCustomer, cartController.addProductCart)
 
 router.delete('/:cid/products/:idProduct', cartController.deleteProductCart)
 
@@ -21,5 +22,15 @@ router.delete('/:cid', cartController.deleteCart)
 router.put('/:cid', cartController.updateCart)
 
 router.put('/:cid/:product/:idProduct', cartController.updateProductCart)
+
+// Orden de compra
+
+router.get('/orders/purchase', cartController.getOrders)
+
+router.get('/orders/:id/purchase', cartController.getOrderById)
+
+router.post('/:cid/purchase', cartController.addOrderCart)
+
+router.delete('/orders/:id/purchase', cartController.deleteOrder)
 
 module.exports = router

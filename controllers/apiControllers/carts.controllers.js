@@ -1,5 +1,10 @@
-const cartManager = require('../../dao/managersMongo/cart.manager')
-const productManager = require('../../dao/managersMongo/product.manager')
+const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+
+const cartManager = ManagerFactory.getManagerInstance('carts')
+const productManager = ManagerFactory.getManagerInstance('products')
+const purchaseManager = ManagerFactory.getManagerInstance('purchases')
+
+const mailSenderService = require('../../services/mail.sender.service')
 
 class CartController {
 
@@ -183,6 +188,172 @@ class CartController {
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     
+    }
+
+    // ORDENES DE COMPRA
+    // Crear la orden de compra
+    async addOrderCart (req, res) {
+        const { cid } = req.params
+
+    // Ejecutamos un metodo para crear la orden de compra
+
+        let cart = await cartManager.getCartById(cid)
+
+        if(!cart) {
+            return res.sendStatus(404)
+        }
+
+        const { products: productsInCart } = cart
+        const products = [] 
+        const productsDelete = []
+
+        for (const { product: id, quantity } of productsInCart) {
+            // Chequeo el Stock
+            
+            const p = await productManager.getProductById(id)
+
+            if(!p.stock){
+                return
+            }
+
+            const toBuy = p.stock >= quantity ? quantity : p.stock
+
+            products.push({
+                id: p._id,
+                price: p.price,
+                quantity: toBuy
+            })
+            
+            // Array de productos que no pudieron comprarse
+            if(quantity > p.stock){
+                productsDelete.push({
+                    id: p._id,
+                    unPurchasedQuantity: quantity - p.stock
+                })
+            } 
+            
+            // Actualizacion del carrito de compras
+            if(p.stock > quantity){
+                await cartManager.deleteProductsCart(cid)
+            }
+            
+            // Actualizamos el Stock
+            p.stock = p.stock - toBuy
+            
+            await p.save()
+            
+        }
+
+        // Dejar el carrito de compras con los productos que no pudieron comprarse. 
+        for(const { id, unPurchasedQuantity } of productsDelete) {
+            await cartManager.addProductCart(cid, id)
+            await cartManager.updateProductCart(cid, {quantity: unPurchasedQuantity}, id)
+        }
+
+        cart = await cart.populate({ path: 'user', select: [ 'email', 'first_name', 'last_name' ] })
+
+        //FECHA
+        const today = new Date()
+        const hoy = today.toLocaleString()
+
+        const order = {
+            user: cart.user._id,
+            code: Date.now(),
+            total: products.reduce((total, { price, quantity }) => (price * quantity) + total, 0),
+            products: products.map(({ id, quantity }) => {
+                return {
+                    product: id,
+                    quantity
+                }
+            }),
+            purchaser: cart.user.email,
+            purchaseDate: hoy
+        }
+
+        purchaseManager.addOrder(order)
+
+        // Envio de Ticket al mail
+
+        const template = `
+            <h2>¡Hola ${cart.user.first_name}!</h2>
+            <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>
+            <br>
+            <div style="border: solid 1px black; width: 310px;">
+                <h3 style="font-weight: bold; color: black; text-align: center;">Comprobante de Compra</h3>
+                <ul style="list-style: none; color: black; font-weight: 500;">
+                    <li>Nombre y Apellido: ${cart.user.first_name}, ${cart.user.last_name}</li>
+                    <li>Codigo: ${order.code}</li>
+                    <li>Catidad de Productos Comprados: ${order.products.length}</li>
+                    <li>Total: $ ${order.total}</li>
+                    <li>Fecha: ${order.purchaseDate}</li>
+                </ul>
+            </div>
+
+            <h3>¡Muchas gracias, te esperamos pronto!</h3>
+        `
+
+        mailSenderService.send(order.purchaser, template)
+
+        res.status(202).send(
+            {
+                Accepted: `!Felicitaciones ha finalizado su compra!. Orden enviada por mail`,
+                unPurchasedProducts: productsDelete
+            })
+
+    }
+
+    // Mostrar todas las ordenes de compra
+
+    async getOrders (req, res) {
+
+        const orders = await purchaseManager.getOrders()
+
+        res.send(orders)
+    }
+
+    // Mostrar la orden por ID
+    async getOrderById (req, res) {
+        const { id } = req.params
+
+        try {
+            
+            const order = await purchaseManager.getOrderById(id)
+            if(!order){
+                res.status(404).send({
+                    Error: 'ID DE LA ORDEN INEXISTENTE'
+                })
+                return
+            }
+    
+            res.send(order)
+    
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+        }
+    }
+
+    // Eliminar una orden de compra
+    async deleteOrder (req, res) {
+        const { id } = req.params
+
+        try {
+            
+            const order = await purchaseManager.getOrderById(id)
+            if(!order){
+                res.status(404).send({
+                    Error: 'ID DE LA ORDEN INEXISTENTE'
+                })
+                return
+            }
+    
+            await purchaseManager.deleteOrder(id)
+            res.status(202).send({Accepted: `Se ha eliminado con exito la orden con id: ${id}`})
+    
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+        }
     }
 
 }

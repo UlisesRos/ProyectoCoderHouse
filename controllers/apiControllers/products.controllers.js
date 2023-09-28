@@ -1,9 +1,12 @@
-const productManager = require('../../dao/managersMongo/product.manager')
+const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+
+const productManager = ManagerFactory.getManagerInstance('products')
 
 class ProductController {
 
     async getProducts (req, res) {
 
+        console.log(req.user, "controlador")
         let { query, page, limit, sort } = req.query
     
     

@@ -1,5 +1,10 @@
-const productManager = require('../dao/managersMongo/product.manager')
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const productManager = ManagerFactory.getManagerInstance('products')
+const cartManager = ManagerFactory.getManagerInstance('carts')
+const purchaseManager = ManagerFactory.getManagerInstance('purchases')
+
+const mailSenderService = require('../services/mail.sender.service')
 
 class HomeController {
 
@@ -60,7 +65,7 @@ class HomeController {
         }
         
         const cart = await cartManager.getCartById(req.user.cart._id)
-    
+
         res.render('home', {
             title: 'Home',
             user: req.user ? {
@@ -228,6 +233,8 @@ class HomeController {
         })
         
         const totalCarrito = products.reduce((ac, pr) => ac = ac+pr.product.price, 0)
+
+        const cartId = await cartManager.getCartById(req.user.cart._id)
     
         res.render('carts', {   
             title: 'Carrito De Compras',
@@ -237,8 +244,144 @@ class HomeController {
                 isPublic: req.user.role == 'Customer'
             } : null,
             products,
+            falseCart: !cartId.products.length,
+            cartLength: cartId.products.length,
+            idCart: cartId._id,
             totalCarrito,
             style: 'carts'
+        })
+    }
+
+    // Ruta de la orden de compra
+    async getOrderHome(req, res) {
+
+        const { cid } = req.params
+
+    // Ejecutamos un metodo para crear la orden de compra
+
+        let cart = await cartManager.getCartById(cid)
+
+        if(!cart) {
+            return
+        }
+
+        const { products: productsInCart } = cart
+        const products = [] 
+        const productsDelete = []
+
+        for (const { product: id, quantity } of productsInCart) {
+            // Chequeo el Stock
+            
+            const p = await productManager.getProductById(id)
+
+            if(!p.stock){
+
+                const cartId = await cartManager.getCartById(req.user.cart._id)
+                res.render('errorCarrito', {
+                    title: '¡No hay mas stock de estos productos',
+                    user: req.user ? {
+                        ...req.user,
+                        isAdmin: req.user.role == 'admin',
+                        isPublic: req.user.role == 'Customer'
+                    } : null,
+                    idCart: cartId._id,
+                    style: 'order'
+                })
+
+                await cartManager.deleteProductsCart(cid)
+                return
+            }
+
+            const toBuy = p.stock >= quantity ? quantity : p.stock
+
+            products.push({
+                id: p._id,
+                price: p.price,
+                quantity: toBuy
+            })
+            
+            // Array de productos que no pudieron comprarse
+            if(quantity > p.stock){
+                productsDelete.push({
+                    id: p._id,
+                    unPurchasedQuantity: quantity - p.stock
+                })
+            } 
+            
+            // Actualizacion del carrito de compras
+            if(p.stock > quantity){
+                await cartManager.deleteProductsCart(cid)
+            }
+            
+            // Actualizamos el Stock
+            p.stock = p.stock - toBuy
+            
+            await p.save()
+            
+        }
+
+        // Dejar el carrito de compras con los productos que no pudieron comprarse. 
+        for(const { id, unPurchasedQuantity } of productsDelete) {
+            await cartManager.addProductCart(cid, id)
+            await cartManager.updateProductCart(cid, {quantity: unPurchasedQuantity}, id)
+        }
+
+        cart = await cart.populate({ path: 'user', select: [ 'email', 'first_name', 'last_name' ] })
+
+        //FECHA
+        const today = new Date()
+        const hoy = today.toLocaleString()
+
+        const order = {
+            user: cart.user._id,
+            code: Date.now(),
+            total: products.reduce((total, { price, quantity }) => (price * quantity) + total, 0),
+            products: products.map(({ id, quantity }) => {
+                return {
+                    product: id,
+                    quantity
+                }
+            }),
+            purchaser: cart.user.email,
+            purchaseDate: hoy
+        }
+
+        purchaseManager.addOrder(order)
+
+        // Envio de Ticket al mail
+
+        const template = `
+            <h2>¡Hola ${cart.user.first_name}!</h2>
+            <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>
+            <br>
+            <div style="border: solid 1px black; width: 310px;">
+                <h3 style="font-weight: bold; color: black; text-align: center;">Comprobante de Compra</h3>
+                <ul style="list-style: none; color: black; font-weight: 500;">
+                    <li>Nombre y Apellido: ${cart.user.first_name}, ${cart.user.last_name}</li>
+                    <li>Codigo: ${order.code}</li>
+                    <li>Catidad de Productos Comprados: ${order.products.length}</li>
+                    <li>Total: $ ${order.total}</li>
+                    <li>Fecha: ${order.purchaseDate}</li>
+                </ul>
+            </div>
+
+            <h3>¡Muchas gracias, te esperamos pronto!</h3>
+        `
+
+        mailSenderService.send(order.purchaser, template)
+
+        const cartId = await cartManager.getCartById(req.user.cart._id)
+
+        res.render('order', {
+            title: '¡Felicitaciones, Su compra se realizo con exito!',
+            user: req.user ? {
+                ...req.user,
+                isAdmin: req.user.role == 'admin',
+                isPublic: req.user.role == 'Customer'
+            } : null,
+            idCart: cartId._id,
+            style: 'order',
+            order
         })
     }
 

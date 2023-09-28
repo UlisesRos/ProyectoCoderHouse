@@ -51,7 +51,7 @@
             saveUninitialized: true,
             store: MongoStore.create({
                 mongoUrl: MONGO_CONNECT,
-                ttl: 60 * 20
+                ttl: 60 * 60
             })
         }))
 
@@ -71,15 +71,17 @@
             next()
         })
 
+        app.use((req, res, next) => {
+            req.io = io
+
+            next()
+        })
+
         // ruta del home
         app.use('/', home)
         
         // ruta de las api
-        app.use('/api', (req, res, next) => {
-            req.io = io
-
-            next()
-        }, api)
+        app.use('/api', api)
         
         
         // WEB SOCKET

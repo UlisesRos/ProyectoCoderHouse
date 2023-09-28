@@ -1,4 +1,6 @@
-const cartManager = require('../dao/managersMongo/cart.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const cartManager = ManagerFactory.getManagerInstance('carts')
 
 class CartController {
 

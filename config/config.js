@@ -12,7 +12,16 @@ module.exports = {
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     GITHUB_STRATEGY_NAME: process.env.GITHUB_STRATEGY_NAME,
 
+    //PERSISTENCIA
+    PERSISTANCE: process.env.MANAGER_PERSISTANCE,
+
     // ADMIN
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
-    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+
+    //MAIL
+    mail: {
+        GMAIL_ADDRESS: process.env.GMAIL_ADDRESS,
+        GMAIL_PWD: process.env.GMAIL_PWD
+    }
 }

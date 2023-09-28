@@ -1,4 +1,7 @@
-const userManager = require('../dao/managersMongo/user.manager')
+const ManagerFactory = require('../dao/managersMongo/manager.factory')
+
+const userManager = ManagerFactory.getManagerInstance('users')
+
 const { isValidPassword } = require('../utils/password')
 
 
