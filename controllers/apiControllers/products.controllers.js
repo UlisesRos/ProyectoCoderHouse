@@ -1,4 +1,7 @@
 const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+const CustomError = require('../../errors/custom.error')
+const EErrors = require('../../errors/enum.error')
+const { productErrorInfo, errorExistingProduct } = require('../../errors/info.error')
 
 const productManager = ManagerFactory.getManagerInstance('products')
 
@@ -90,7 +93,7 @@ class ProductController {
     
     }
 
-    async getProductById (req, res) {
+    async getProductById (req, res, next) {
         const { pid } = req.params
     
         try {
@@ -98,10 +101,16 @@ class ProductController {
             const product = await productManager.getProductById(pid)
             
             if(!product){
-                res.status(404).send({
-                    Error: 'ID INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${pid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
+                return
             }
+
             res.send(product)
             
         } catch (error) {
@@ -111,28 +120,39 @@ class ProductController {
     
     }
 
-    async addProduct (req, res) {
+    async addProduct (req, res, next) {
+        const { title, description, price, category, code, stock } = req.body
         const { body } = req
     
         const {docs: product} = await productManager.getProducts()
         
-        if(!body.title || !body.description || !body.price || !body.category || !body.code || !body.stock){
-            res.status(400).send({
-                Error: 'todos los campos son obligatorios'
-            })
-        } else if (product.find(prod => prod.title == body.title || prod.code == body.code)) {
-            res.status(400).send({
-                Error: 'title o code ya existe'
-            })
+        if(!title || !description || !price || !category || !code || !stock){
+            next(CustomError.createError({
+                name: 'CAMPOS OBLIGATORIOS',
+                message: 'Todos los campos son obligatorios',
+                cause: productErrorInfo({ title, description, price, category, code, stock }),
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 400
+            }))
+            return
+        } else if (product.find(prod => prod.title == title || prod.code == code)) {
+            next(CustomError.createError({
+                name: 'PRODUCTO EXISTENTE',
+                message: 'El producto ya existe.',
+                cause: await errorExistingProduct({ title, code }),
+                code: EErrors.PRODUCTO_EXISTENTE,
+                statusCode: 400
+            }))
+            return
         } else {
             req.io.emit('addProduct', body);
             await productManager.addProduct(body)
-            res.status(201).send({Created: `El Producto ${body.title} fue creado con exito`})
+            res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
         }
         
     }
 
-    async updateProduct (req, res) {
+    async updateProduct (req, res, next) {
         const { pid } = req.params
         const { body } = req
     
@@ -144,9 +164,13 @@ class ProductController {
                 return
             }
             
-            res.status(404).send({
-                Error: 'ID INEXISTENTE'
-            })
+            next(CustomError.createError({
+                name: 'ID INEXISTENTE',
+                message: 'El id ingresado es inexistente',
+                cause: `El id: ${pid} que ingresaste es inexistente`,
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 401
+            }))
     
         } catch (error) {
     
@@ -158,30 +182,48 @@ class ProductController {
     
     }
 
-    async deleteProduct (req, res) {
+    async deleteProduct (req, res, next) {
         const { pid } = req.params
         
         try {
             
             const productId = await productManager.getProductById( pid )
-    
-            req.io.emit('deleteProduct', productId.code)
-    
+            
             const result = await productManager.deleteProduct(pid)
             if (result.deletedCount >= 1) {
+                req.io.emit('deleteProduct', productId.code)
                 res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
                 return
             }
             
-            res.status(404).send({
-                Error: 'ID INEXISTENTE'
-            })
+            next(CustomError.createError({
+                name: 'ID INEXISTENTE',
+                message: 'El id ingresado es inexistente',
+                cause: `El id: ${pid} que ingresaste es inexistente`,
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 401
+            }))
             
         } catch (error) {
             console.log(error)
             res.status(500).send({ error: 'Ocurrio un error en el servidor'})
         }
         
+    }
+
+
+    // GENERADOR DE PRODUCTOS CON MOCK
+    async getProductsMock (req, res) {
+        try {
+            
+            const products = await productManager.getProductsMock()
+
+            res.send(products)
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({ error: 'Ocurrio un error en el servidor'})
+        }
     }
 }
 

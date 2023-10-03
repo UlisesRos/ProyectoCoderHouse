@@ -6,6 +6,8 @@ const router = Router()
 
 router.get('/', productController.getProducts)
 
+router.get('/mockingproducts', productController.getProductsMock)
+
 router.get('/:pid', productController.getProductById)
 
 router.post('/', policiesAdmin, productController.addProduct)

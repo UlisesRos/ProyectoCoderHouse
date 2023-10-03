@@ -1,4 +1,7 @@
 const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+const CustomError = require('../../errors/custom.error')
+const EErrors = require('../../errors/enum.error')
+const { userErrorInfo, errorExistingUser } = require('../../errors/info.error')
 
 const userManager = ManagerFactory.getManagerInstance('users')
 
@@ -29,15 +32,19 @@ class UserController {
     }
 
     // Mostrar usuarios por ID
-    async getUserById (req, res) {
+    async getUserById (req, res, next) {
         const { id } = req.params
     
         try {
             const userId = await userManager.getUserById( id )
             if(!userId){
-                res.status(404).send({
-                    Error: 'ID DEL USUARIO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL USUARIO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${id} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     
@@ -50,19 +57,29 @@ class UserController {
     }
 
     // Creacion de Usuario
-    async addUser (req, res) {
+    async addUser (req, res, next) {
 
+        const { first_name, last_name, email, age, password } = req.body
         const { body } = req
         const users = await userManager.getUsers()
     
-        if(!body.first_name || !body.last_name || !body.email || !body.age || !body.password){
-            res.status(400).send({
-                error: 'Todos los campos son obligatorios'
-            })
-        } else if(users.find(us => us.email == body.email)){
-            res.status(400).send({
-                error: 'El email ya existe.'
-            })
+        if(!first_name || !last_name || !email || !age || !password){
+            next(CustomError.createError({
+                name: 'CAMPOS OBLIGATORIOS',
+                message: 'Todos los campos son obligatorios',
+                cause: userErrorInfo({ first_name, last_name, email, age, password }),
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 400
+            }))
+            return
+        } else if(users.find(us => us.email == email)){
+            next(CustomError.createError({
+                name: 'PRODUCTO EXISTENTE',
+                message: 'El producto ya existe.',
+                cause: await errorExistingUser({ email }),
+                code: EErrors.PRODUCTO_EXISTENTE,
+                statusCode: 400
+            }))
         } else{
     
             await userManager.addUser( body )
@@ -75,7 +92,7 @@ class UserController {
     }
 
     // Modificar Usuarios
-    async updateUser (req, res) {
+    async updateUser (req, res, next) {
 
         const { id } = req.params
         const { body } = req
@@ -88,9 +105,13 @@ class UserController {
                 return
             }
             
-            res.status(404).send({
-                error: 'ID INEXISTENTE'
-            })
+            next(CustomError.createError({
+                name: 'ID DEL USUARIO INEXISTENTE',
+                message: 'El id ingresado es inexistente',
+                cause: `El id: ${id} que ingresaste es inexistente`,
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 401
+            }))
     
         } catch (error) {
             res.status(500).send({
@@ -102,7 +123,7 @@ class UserController {
     }
 
     // Eliminar usuario
-    async deleteUser (req, res) {
+    async deleteUser (req, res, next) {
 
         const { id } = req.params
     
@@ -116,9 +137,13 @@ class UserController {
                 return
             }
     
-            res.status(404).send({
-                error: 'ID INEXISTENTE'
-            })
+            next(CustomError.createError({
+                name: 'ID DEL USUARIO INEXISTENTE',
+                message: 'El id ingresado es inexistente',
+                cause: `El id: ${id} que ingresaste es inexistente`,
+                code: EErrors.INVALID_TYPES_ERROR,
+                statusCode: 401
+            }))
     
         } catch (error) {
             res.status(500).send({

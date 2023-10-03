@@ -2,6 +2,7 @@
 
 // Importacion del modelo de mongo
 const productModel = require('../models/product.model')
+const generateProducts = require('../../utils/mock.utils')
 
 class ProductManager {
 
@@ -86,6 +87,13 @@ class ProductManager {
 
         return result
         
+    }
+
+    // GENERADOR DE PRODUCTOS CON MOCK
+
+    async getProductsMock() {
+
+        return await generateProducts()
     }
 
 }

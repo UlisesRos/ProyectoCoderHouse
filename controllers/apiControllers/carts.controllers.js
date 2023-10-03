@@ -1,4 +1,6 @@
 const ManagerFactory = require('../../dao/managersMongo/manager.factory')
+const CustomError = require('../../errors/custom.error')
+const EErrors = require('../../errors/enum.error')
 
 const cartManager = ManagerFactory.getManagerInstance('carts')
 const productManager = ManagerFactory.getManagerInstance('products')
@@ -26,16 +28,20 @@ class CartController {
     }
 
     // Leer los productos del carrito con su C-ID
-    async getCartById (req, res) {
+    async getCartById (req, res, next) {
         const { cid } = req.params
     
         try {
             
             const cartId = await cartManager.getCartById( cid )
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     
@@ -49,7 +55,7 @@ class CartController {
     }
 
     // Agregar productos a los carritos
-    async addProductCart (req, res) {
+    async addProductCart (req, res, next) {
         const { cid, idProduct } = req.params
     
         try {
@@ -57,16 +63,24 @@ class CartController {
             const productId = await productManager.getProductById( idProduct )
     
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     
             if(!productId){
-                res.status(404).send({
-                    Error: 'ID DEL PRODUCTO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL PRODUCTO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${idProduct} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
             
@@ -80,23 +94,31 @@ class CartController {
     }
 
     // Eliminar producto dentro del carrito
-    async deleteProductCart (req, res) {
+    async deleteProductCart (req, res, next) {
         const {cid, idProduct} = req.params
     
         try {
             const cartId = await cartManager.getCartById( cid )
     
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     
             if(!cartId.products.find(pr => pr.product == idProduct)){
-                res.status(404).send({
-                    Error: 'ID DEL PRODUCTO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL PRODUCTO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${idProduct} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
         
@@ -110,16 +132,20 @@ class CartController {
     }
 
     // Eliminar carrito
-    async deleteCart (req, res) {
+    async deleteCart (req, res, next) {
         const { cid } = req.params
     
         try {
             const cartId = await cartManager.getCartById( cid )
     
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
             
@@ -133,16 +159,20 @@ class CartController {
     }
 
     // Modificar carrito
-    async updateCart (req, res) {
+    async updateCart (req, res, next) {
         const { cid } = req.params
         const { body } = req
     
         try {
             const cartId = await cartManager.getCartById( cid )
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
             
@@ -155,7 +185,7 @@ class CartController {
     }
 
     // Modificar producto dentro del carrito
-    async updateProductCart (req, res) {
+    async updateProductCart (req, res, next) {
         const { cid, idProduct } = req.params
         const { body } = req
     
@@ -167,16 +197,24 @@ class CartController {
             }
             
             if(!cartId){
-                res.status(404).send({
-                    Error: 'ID DE CARRITO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
         
             if(!cartId.products.find(pr => pr.product == idProduct)){
-                res.status(404).send({
-                    Error: 'ID DEL PRODUCTO INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DEL PRODUCT INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${idProduct} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
         
@@ -195,110 +233,117 @@ class CartController {
     async addOrderCart (req, res) {
         const { cid } = req.params
 
-    // Ejecutamos un metodo para crear la orden de compra
-
-        let cart = await cartManager.getCartById(cid)
-
-        if(!cart) {
-            return res.sendStatus(404)
-        }
-
-        const { products: productsInCart } = cart
-        const products = [] 
-        const productsDelete = []
-
-        for (const { product: id, quantity } of productsInCart) {
-            // Chequeo el Stock
-            
-            const p = await productManager.getProductById(id)
-
-            if(!p.stock){
-                return
-            }
-
-            const toBuy = p.stock >= quantity ? quantity : p.stock
-
-            products.push({
-                id: p._id,
-                price: p.price,
-                quantity: toBuy
-            })
-            
-            // Array de productos que no pudieron comprarse
-            if(quantity > p.stock){
-                productsDelete.push({
-                    id: p._id,
-                    unPurchasedQuantity: quantity - p.stock
-                })
-            } 
-            
-            // Actualizacion del carrito de compras
-            if(p.stock > quantity){
-                await cartManager.deleteProductsCart(cid)
-            }
-            
-            // Actualizamos el Stock
-            p.stock = p.stock - toBuy
-            
-            await p.save()
-            
-        }
-
-        // Dejar el carrito de compras con los productos que no pudieron comprarse. 
-        for(const { id, unPurchasedQuantity } of productsDelete) {
-            await cartManager.addProductCart(cid, id)
-            await cartManager.updateProductCart(cid, {quantity: unPurchasedQuantity}, id)
-        }
-
-        cart = await cart.populate({ path: 'user', select: [ 'email', 'first_name', 'last_name' ] })
-
-        //FECHA
-        const today = new Date()
-        const hoy = today.toLocaleString()
-
-        const order = {
-            user: cart.user._id,
-            code: Date.now(),
-            total: products.reduce((total, { price, quantity }) => (price * quantity) + total, 0),
-            products: products.map(({ id, quantity }) => {
-                return {
-                    product: id,
-                    quantity
+        try {
+            // Ejecutamos un metodo para crear la orden de compra
+        
+                let cart = await cartManager.getCartById(cid)
+        
+                if(!cart) {
+                    return res.sendStatus(404)
                 }
-            }),
-            purchaser: cart.user.email,
-            purchaseDate: hoy
+        
+                const { products: productsInCart } = cart
+                const products = [] 
+                const productsDelete = []
+        
+                for (const { product: id, quantity } of productsInCart) {
+                    // Chequeo el Stock
+                    
+                    const p = await productManager.getProductById(id)
+        
+                    if(!p.stock){
+                        return
+                    }
+        
+                    const toBuy = p.stock >= quantity ? quantity : p.stock
+        
+                    products.push({
+                        id: p._id,
+                        price: p.price,
+                        quantity: toBuy
+                    })
+                    
+                    // Array de productos que no pudieron comprarse
+                    if(quantity > p.stock){
+                        productsDelete.push({
+                            id: p._id,
+                            unPurchasedQuantity: quantity - p.stock
+                        })
+                    } 
+                    
+                    // Actualizacion del carrito de compras
+                    if(p.stock > quantity){
+                        await cartManager.deleteProductsCart(cid)
+                    }
+                    
+                    // Actualizamos el Stock
+                    p.stock = p.stock - toBuy
+                    
+                    await p.save()
+                    
+                }
+        
+                // Dejar el carrito de compras con los productos que no pudieron comprarse. 
+                for(const { id, unPurchasedQuantity } of productsDelete) {
+                    await cartManager.addProductCart(cid, id)
+                    await cartManager.updateProductCart(cid, {quantity: unPurchasedQuantity}, id)
+                }
+        
+                cart = await cart.populate({ path: 'user', select: [ 'email', 'first_name', 'last_name' ] })
+        
+                //FECHA
+                const today = new Date()
+                const hoy = today.toLocaleString()
+        
+                const order = {
+                    user: cart.user._id,
+                    code: Date.now(),
+                    total: products.reduce((total, { price, quantity }) => (price * quantity) + total, 0),
+                    products: products.map(({ id, quantity }) => {
+                        return {
+                            product: id,
+                            quantity
+                        }
+                    }),
+                    purchaser: cart.user.email,
+                    purchaseDate: hoy
+                }
+        
+                purchaseManager.addOrder(order)
+        
+                // Envio de Ticket al mail
+        
+                const template = `
+                    <h2>¡Hola ${cart.user.first_name}!</h2>
+                    <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>
+                    <br>
+                    <div style="border: solid 1px black; width: 310px;">
+                        <h3 style="font-weight: bold; color: black; text-align: center;">Comprobante de Compra</h3>
+                        <ul style="list-style: none; color: black; font-weight: 500;">
+                            <li>Nombre y Apellido: ${cart.user.first_name}, ${cart.user.last_name}</li>
+                            <li>Codigo: ${order.code}</li>
+                            <li>Catidad de Productos Comprados: ${order.products.length}</li>
+                            <li>Total: $ ${order.total}</li>
+                            <li>Fecha: ${order.purchaseDate}</li>
+                        </ul>
+                    </div>
+        
+                    <h3>¡Muchas gracias, te esperamos pronto!</h3>
+                `
+        
+                mailSenderService.send(order.purchaser, template)
+        
+                res.status(202).send(
+                    {
+                        Accepted: `!Felicitaciones ha finalizado su compra!. Orden enviada por mail`,
+                        unPurchasedProducts: productsDelete
+                    })
+
+        } catch (error) {
+            console.log(error)
+            res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
 
-        purchaseManager.addOrder(order)
-
-        // Envio de Ticket al mail
-
-        const template = `
-            <h2>¡Hola ${cart.user.first_name}!</h2>
-            <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>
-            <br>
-            <div style="border: solid 1px black; width: 310px;">
-                <h3 style="font-weight: bold; color: black; text-align: center;">Comprobante de Compra</h3>
-                <ul style="list-style: none; color: black; font-weight: 500;">
-                    <li>Nombre y Apellido: ${cart.user.first_name}, ${cart.user.last_name}</li>
-                    <li>Codigo: ${order.code}</li>
-                    <li>Catidad de Productos Comprados: ${order.products.length}</li>
-                    <li>Total: $ ${order.total}</li>
-                    <li>Fecha: ${order.purchaseDate}</li>
-                </ul>
-            </div>
-
-            <h3>¡Muchas gracias, te esperamos pronto!</h3>
-        `
-
-        mailSenderService.send(order.purchaser, template)
-
-        res.status(202).send(
-            {
-                Accepted: `!Felicitaciones ha finalizado su compra!. Orden enviada por mail`,
-                unPurchasedProducts: productsDelete
-            })
 
     }
 
@@ -312,16 +357,20 @@ class CartController {
     }
 
     // Mostrar la orden por ID
-    async getOrderById (req, res) {
+    async getOrderById (req, res, next) {
         const { id } = req.params
 
         try {
             
             const order = await purchaseManager.getOrderById(id)
             if(!order){
-                res.status(404).send({
-                    Error: 'ID DE LA ORDEN INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DE LA ORDEN INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${id} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     
@@ -334,16 +383,20 @@ class CartController {
     }
 
     // Eliminar una orden de compra
-    async deleteOrder (req, res) {
+    async deleteOrder (req, res, next) {
         const { id } = req.params
 
         try {
             
             const order = await purchaseManager.getOrderById(id)
             if(!order){
-                res.status(404).send({
-                    Error: 'ID DE LA ORDEN INEXISTENTE'
-                })
+                next(CustomError.createError({
+                    name: 'ID DE LA ORDEN INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${id} que ingresaste es inexistente`,
+                    code: EErrors.INVALID_TYPES_ERROR,
+                    statusCode: 401
+                }))
                 return
             }
     

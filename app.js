@@ -1,3 +1,4 @@
+
 (async () => {
     require('dotenv').config()
     
@@ -13,6 +14,7 @@
     const MongoStore = require('connect-mongo')
     const passport = require('passport')
     const { PORT, HOST, MONGO_CONNECT, ADMIN_EMAIL, ADMIN_PASSWORD } = require('./config/config')
+    const handleError = require('./middlewares/handleError')
 
     const { api, home } = require('./routes/index.js')
     const SocketManager = require('./websocket')
@@ -82,7 +84,8 @@
         
         // ruta de las api
         app.use('/api', api)
-        
+
+        app.use(handleError)
         
         // WEB SOCKET
         io.on('connection', SocketManager)

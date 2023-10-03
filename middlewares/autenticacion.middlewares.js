@@ -8,5 +8,4 @@ function autenticacion(req, res, next){
     res.redirect('/login')
 }
 
-
 module.exports = autenticacion
