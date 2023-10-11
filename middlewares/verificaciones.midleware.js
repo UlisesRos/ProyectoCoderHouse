@@ -3,6 +3,7 @@ const ManagerFactory = require('../dao/managersMongo/manager.factory')
 const userManager = ManagerFactory.getManagerInstance('users')
 
 const { isValidPassword } = require('../utils/password')
+const logger = require('../logger/index')
 
 
 async function verificacionLogin(req, res, next){
@@ -47,7 +48,7 @@ async function verificacionLogin(req, res, next){
         }
 
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         res.render('login', {
             error: 'Ocurrio un error. Vuelve a intentarlo.',
             style: 'login'

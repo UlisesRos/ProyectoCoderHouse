@@ -1,6 +1,7 @@
 const ManagerFactory = require('../../dao/managersMongo/manager.factory')
 const CustomError = require('../../errors/custom.error')
 const EErrors = require('../../errors/enum.error')
+const logger = require('../../logger/index')
 
 const cartManager = ManagerFactory.getManagerInstance('carts')
 const productManager = ManagerFactory.getManagerInstance('products')
@@ -48,8 +49,8 @@ class CartController {
             res.send(cartId)
     
         } catch (error) {
-            console.log(error)
-            res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+            logger.error(error)
+            res.status(500).send({ error: 'Ocurrio un error en el sistema' })
         }
     
     }
@@ -88,7 +89,7 @@ class CartController {
             res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${ cid }`})
             
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }
@@ -126,7 +127,7 @@ class CartController {
             res.status(202).send({ Accepted: `Se elimino el producto con id: ${idProduct} del carrito con id: ${cid}`})
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }
@@ -153,7 +154,7 @@ class CartController {
             res.status(202).send({ Accepted: `Se eliminaron todos los productos del carrito con id: ${cid}`})
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }
@@ -179,7 +180,7 @@ class CartController {
             await cartManager.updateCart(cid, body)
             res.status(202).send({ Accepted: `El carrito con id: ${cid} ha sido modificado.` })
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }
@@ -193,7 +194,7 @@ class CartController {
             const cartId = await cartManager.getCartById( cid )
     
             if(!body == { quantity: Number }){
-                console.log('Error')
+                logger.error('Error')
             }
             
             if(!cartId){
@@ -222,7 +223,7 @@ class CartController {
             res.status(202).send({ Accepted: `El producto con id: ${idProduct} del carrito con id: ${cid} ha modificado su cantidad` })
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     
@@ -340,7 +341,7 @@ class CartController {
                     })
 
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
 
@@ -377,7 +378,7 @@ class CartController {
             res.send(order)
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }
@@ -404,7 +405,7 @@ class CartController {
             res.status(202).send({Accepted: `Se ha eliminado con exito la orden con id: ${id}`})
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     }

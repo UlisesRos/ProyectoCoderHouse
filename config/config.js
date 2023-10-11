@@ -7,6 +7,9 @@ module.exports = {
     PORT: process.env.PORT,
     HOST: process.env.HOST,
 
+    // ENTORNO
+    URL: process.env.URL,
+
     // Conexion con GitHub
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
@@ -23,5 +26,10 @@ module.exports = {
     mail: {
         GMAIL_ADDRESS: process.env.GMAIL_ADDRESS,
         GMAIL_PWD: process.env.GMAIL_PWD
-    }
+    },
+
+    //LEVEL WINSTON
+    CONSOLE_LOG_LEVEL: 'debug',
+    FILE_LOG_LEVEL: 'info',
+    ERROR_LOG_LEVEL: 'error'
 }

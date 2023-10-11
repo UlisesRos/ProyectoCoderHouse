@@ -20,6 +20,8 @@
     const SocketManager = require('./websocket')
     const initPassportLocal = require('./config/passport.init.js')
     const { isValidPassword } = require('./utils/password.js')
+    const logger = require('./logger/index')
+    const loggerMiddleware = require('./middlewares/logger.middleware')
 
     try {
         
@@ -31,6 +33,8 @@
         const server = http.createServer(app) 
         const io = new Server(server) // SOCKET
         
+        app.use(loggerMiddleware)
+
         //handlebars
         app.engine('handlebars', handlebars.engine({
             extname: 'handlebars',
@@ -63,7 +67,7 @@
         app.use(passport.session())
         
         //middlware GLOBAL
-        app.use((req, res, next) => {
+        app.use((req, _res, next) => {
 
             if(req.user){  
                 if(req.user.email == ADMIN_EMAIL && isValidPassword(ADMIN_PASSWORD, req.user.password)){
@@ -73,7 +77,7 @@
             next()
         })
 
-        app.use((req, res, next) => {
+        app.use((req, _res, next) => {
             req.io = io
 
             next()
@@ -92,14 +96,13 @@
         
         
         server.listen(PORT, () => {
-            console.log(`Servidor leyendose desde http://${HOST}:${PORT}`)
+            logger.info(`Servidor leyendose desde http://${HOST}:${PORT}`)
         })
 
-        console.log('Se ha conectado a la base de datos de MongoDb')
+        logger.warn('Se ha conectado a la base de datos de MongoDb')
 
     } catch (error) {
-        console.log('No se ha podido conectar a la base de datos')
-        console.log(error)
+        logger.error('No se ha podido conectar a la base de datos')
     }
 })()
 

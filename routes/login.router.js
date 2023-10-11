@@ -6,6 +6,7 @@ const {verificacionLogin, verificacionSignup} = require('../middlewares/verifica
 const { hashPassword, isValidPassword } = require('../utils/password')
 const { GITHUB_STRATEGY_NAME } = require('../config/config')
 const loginControllers = require('../controllers/login.controllers')
+const logger = require('../logger/index')
 
 const router = Router()
 
@@ -123,7 +124,7 @@ const login = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         res.render('login', {
             error: 'Ocurrio un error. Vuelve a intentarlo.',
             style: 'login'

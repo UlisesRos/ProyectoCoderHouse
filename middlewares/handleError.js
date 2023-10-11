@@ -1,7 +1,8 @@
 const EErrors = require('../errors/enum.error')
+const logger = require('../logger/index')
 
 function handleError (error, req, res, next) {
-    console.log(error.cause)
+    logger.error(error.cause)
     switch (error.code) {
         case EErrors.ID_INEXISTENTE:
             res.status(error.statusCode).send({

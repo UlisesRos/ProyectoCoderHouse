@@ -2,6 +2,7 @@ const ManagerFactory = require('../../dao/managersMongo/manager.factory')
 const CustomError = require('../../errors/custom.error')
 const EErrors = require('../../errors/enum.error')
 const { userErrorInfo, errorExistingUser } = require('../../errors/info.error')
+const logger = require('../../logger/index')
 
 const userManager = ManagerFactory.getManagerInstance('users')
 
@@ -50,7 +51,7 @@ class UserController {
     
             res.send(userId)
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
     

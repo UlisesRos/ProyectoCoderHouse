@@ -5,6 +5,7 @@ const ManagerFactory = require('../dao/managersMongo/manager.factory')
 const userManager = ManagerFactory.getManagerInstance('users')
 const cartManager = ManagerFactory.getManagerInstance('carts')
 const { hashPassword, isValidPassword } = require('../utils/password')
+const logger = require('../logger/index')
 
 const LocalStrategy = local.Strategy
 
@@ -14,7 +15,7 @@ const signup = async ( req, email, password, done ) => {
     const _user = await userManager.getUserByEmail( email )
 
     if(_user){
-        console.log('El usuario ya existe.')
+        logger.warn('El usuario ya existe.')
         return done(null, false)
     }
 
@@ -40,7 +41,7 @@ const signup = async ( req, email, password, done ) => {
         })
 
     } catch (error) {
-        console.log('Ha ocurrido un error')
+        logger.error('Ha ocurrido un error')
         done(error, false)
     }
 
@@ -53,7 +54,7 @@ const login = async ( email, password, done ) => {
         const _user = await userManager.getUserByEmail( email )
 
         if(!_user){
-            console.log('Contraseña o Usuario incorrecto')
+            logger.war('Contraseña o Usuario incorrecto')
             return done(null, false)
         }
 
@@ -62,14 +63,14 @@ const login = async ( email, password, done ) => {
         }
 
         if(!isValidPassword( password, _user.password )){
-            console.log('Contraseña o Usuario incorrecto')
+            logger.warn('Contraseña o Usuario incorrecto')
             return done(null, false)
         }
         
         done(null, _user)
 
     } catch (error) {
-        console.log('Ha ocurrido un error')
+        logger.error('Ha ocurrido un error')
         done(error, false)
     }
 

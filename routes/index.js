@@ -6,6 +6,9 @@ const UserRouter = require('./api/user.router')
 const LoginRouter = require('./login.router')
 const ChatRouter = require('./chat.router')
 const AdminRouter = require('./admin.router')
+const TestRouter = require('./api/test.router')
+const LoggerTest = require('./api/loggerTest.router')
+
 
 // api
 const router = Router()
@@ -18,6 +21,10 @@ router.use('/carts', CartRouter)
 
 // ruta del usuario
 router.use('/users', UserRouter)
+
+// ruta del test
+router.use('/test', TestRouter)
+router.use('/loggerTest', LoggerTest)
 
 // home
 const home = Router()

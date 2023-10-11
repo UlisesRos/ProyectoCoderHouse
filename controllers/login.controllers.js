@@ -2,6 +2,7 @@ const ManagerFactory = require('../dao/managersMongo/manager.factory')
 
 const userManager = ManagerFactory.getManagerInstance('users')
 const cartManager = ManagerFactory.getManagerInstance('carts')
+const logger = require('../logger/index')
 
 class LoginController {
 
@@ -90,7 +91,7 @@ class LoginController {
             res.redirect('/login')
     
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             return res.render('resetpassword', {
                 error: 'Ha ocurrido un error',
                 style: 'login'

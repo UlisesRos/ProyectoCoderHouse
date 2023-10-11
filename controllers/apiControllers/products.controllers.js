@@ -2,6 +2,7 @@ const ManagerFactory = require('../../dao/managersMongo/manager.factory')
 const CustomError = require('../../errors/custom.error')
 const EErrors = require('../../errors/enum.error')
 const { productErrorInfo, errorExistingProduct } = require('../../errors/info.error')
+const logger = require('../../logger/index')
 
 const productManager = ManagerFactory.getManagerInstance('products')
 
@@ -9,7 +10,6 @@ class ProductController {
 
     async getProducts (req, res) {
 
-        console.log(req.user, "controlador")
         let { query, page, limit, sort } = req.query
     
     
@@ -114,7 +114,7 @@ class ProductController {
             res.send(product)
             
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el servidor'})
         }
     
@@ -205,7 +205,7 @@ class ProductController {
             }))
             
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el servidor'})
         }
         
@@ -221,7 +221,7 @@ class ProductController {
             res.send(products)
 
         } catch (error) {
-            console.log(error)
+            logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el servidor'})
         }
     }

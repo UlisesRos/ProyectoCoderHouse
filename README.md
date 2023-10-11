@@ -75,3 +75,7 @@ Se editaran los siguientes puntos de nuestro login:
 5. Implementamos una ruta /:cid/purchase la cual permitira finalizar con el proceso de compra de dicho carrito. Esta corrobora el stock y la cantidad solicitada por el usuario y realiza las actualizaciones correspondientes del stock en nuestra base de dato, permitiendo al usuario comprar la cantidad de productos que se encuentran disponibles. Los productos que no pueden ser comprados por no tener el stock, se almacenaran en un array y quedaran en el carrito de compras del cliente.
 6. Al finalizar la compra, se le enviara un mail al usuario con el ticket de compra y agraciendole por comprar.
 7. Se modificaron y se agregaron nuevas vistas en handlebars para mejorar la parte del front y permitir al usuario distintas funcionalidades, dependiedo de su ROL en la pagina.
+
+# Agregamos Mocking y manejo de errores
+1. Agregamos dentro de las rutas de productos una ruta llamada: /api/products/mockingproducts la cual generara 100 productos nuevos a traves de FAKER.JS.
+2. Se creo un CustomError para manejar los errores mas comunes de nuestra aplicacion. Esta se utilizo para manejar todos los errores de las rutas de productos, carritos de compras y usuarios. Esta nos devolvera una lista de propiedades requeridas y los tipos de errores para poder reconocerlos.

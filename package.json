@@ -5,13 +5,15 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "seed:products": "node ./scripts/seed.productos.js"
+    "seed:products": "node ./scripts/seed.productos.js",
+    "artillery": "artillery quick --count 40 --num 50 http://localhost:8080/api/test/simple -o simple.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",
+    "artillery": "^2.0.0-37",
     "handlebars": "^4.7.8",
     "nodemon": "^2.0.22",
     "passport-github2": "^0.1.12"
@@ -30,6 +32,7 @@
     "nodemailer": "^6.9.5",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.7.1"
+    "socket.io": "^4.7.1",
+    "winston": "^3.11.0"
   }
 }

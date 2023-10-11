@@ -3,6 +3,7 @@ const ManagerFactory = require('../dao/managersMongo/manager.factory')
 const userManager = ManagerFactory.getManagerInstance('users')
 const cartManager = ManagerFactory.getManagerInstance('carts')
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, PORT, HOST, GITHUB_STRATEGY_NAME } = require('./config')
+const logger = require('../logger/index')
 
 const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: `http://${HOST}:${PORT}/githubSessions` }
 
@@ -11,11 +12,11 @@ const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CL
 
 const gitHubUser = async (profile, done) => {
 
-    console.log(profile._json)
+    logger.info(profile._json)
     const { name, email } = profile._json
     const _user = await userManager.getUserByEmail( email )
     if(!_user){
-        console.log('Usuario inexistente')
+        logger.warn('Usuario inexistente')
         
         const cart = await cartManager.addCart()
 
@@ -33,7 +34,7 @@ const gitHubUser = async (profile, done) => {
     }
 
     // SI EL USUARIO YA EXISTE
-    console.log('El usuario ya existe, rol asignado: ', _user?.role)
+    logger.warn('El usuario ya existe, rol asignado: ', _user?.role)
     return done(null, _user)
 
 }
@@ -43,7 +44,7 @@ const profileController = async ( accessToken, refreshToken, profile, done ) => 
         return await gitHubUser(profile, done)
 
     } catch (error) {
-        console.log(error)
+        logger.error(error)
         done(error)
     }
 }
