@@ -79,3 +79,12 @@ Se editaran los siguientes puntos de nuestro login:
 # Agregamos Mocking y manejo de errores
 1. Agregamos dentro de las rutas de productos una ruta llamada: /api/products/mockingproducts la cual generara 100 productos nuevos a traves de FAKER.JS.
 2. Se creo un CustomError para manejar los errores mas comunes de nuestra aplicacion. Esta se utilizo para manejar todos los errores de las rutas de productos, carritos de compras y usuarios. Esta nos devolvera una lista de propiedades requeridas y los tipos de errores para poder reconocerlos.
+
+# Implementacion de Logger
+1. Definimos un sistema de niveles y colores con las siguientes prioridades: debug, http, info, warn, error, fatal.
+2. Implementamos un logger para desarrollo y otro para produccion.
+    El logger de desarrollo nos mostrara por consola a partir del nivel debug.
+    El logger de produccion nos mostrara tanto por consola como por archivo a partir del nivel info.
+3. Cambiamos todos los console.log() de nuestro servidor por los diferentes loggers.
+4. Creamos un transporte de archivos para enviar los logger de error al archivo error.log.
+5. Creamos un endpoint /api/loggerTest que permitira probar todos los logs.
