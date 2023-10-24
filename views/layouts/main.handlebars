@@ -28,6 +28,14 @@
                         <a href="/carts/{{ idCart }}">Carrito de Compras</a>
                     </li>
                     {{/if}}
+                    {{#if user.isPremium}}
+                    <li class="uk-active">
+                        <a href="/chatmessage">Chat</a>
+                    </li>
+                    <li class="uk-active">
+                        <a href="/carts/{{ idCart }}">Carrito de Compras</a>
+                    </li>
+                    {{/if}}
 
                     {{#if user}}
                     <li>
@@ -43,6 +51,14 @@
                             </li>
                             <li>
                                 <a href="/admin/editarProducto">Admin - Editar Producto</a>
+                            </li>
+                            {{/if}}
+                            {{#if user.isPremium}}
+                            <li>
+                                <a href="/admin/admin">Premium - Agregar Producto</a>
+                            </li>
+                            <li>
+                                <a href="/premium/deletePremium">Premium - Eliminar Producto Premium</a>
                             </li>
                             {{/if}}
                             <li>

@@ -8,6 +8,7 @@ const ChatRouter = require('./chat.router')
 const AdminRouter = require('./admin.router')
 const TestRouter = require('./api/test.router')
 const LoggerTest = require('./api/loggerTest.router')
+const PremiumRouter = require('./premium.router')
 
 
 // api
@@ -40,6 +41,9 @@ home.use('/chatmessage', ChatRouter)
 
 // ruta del admin
 home.use('/admin', AdminRouter)
+
+// ruta de premium
+home.use('/premium', PremiumRouter)
 
 
 module.exports = {

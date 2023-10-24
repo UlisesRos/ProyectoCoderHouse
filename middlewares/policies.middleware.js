@@ -13,6 +13,18 @@ function policiesCustomer (req, res, next) {
     next()
 }
 
+function policiesCustomerAndPremium (req, res, next) {
+
+    if(req.user.role == 'Premium' || req.user.role == 'Customer') {
+        next()
+    } else {
+        return res.status(401).send({
+            error: "Not a valid user"
+        })
+    }
+    
+}
+
 function policiesAdmin (req, res, next) {
 
     if(req.user.role !== 'admin') {
@@ -20,8 +32,20 @@ function policiesAdmin (req, res, next) {
             error: "Not a valid user"
         })
     }
-
+    
     next()
+}
+
+function policiesAdminAndPremium (req, res, next) {
+
+    if(req.user.role == 'Premium' || req.user.role == 'admin') {
+        next()
+    } else {
+        return res.status(401).send({
+            error: "Not a valid user"
+        })
+    }
+    
 }
 
 async function productsOutOfStock (req, res, next) {
@@ -43,5 +67,7 @@ async function productsOutOfStock (req, res, next) {
 module.exports = {
     policiesAdmin,
     policiesCustomer,
-    productsOutOfStock
+    policiesAdminAndPremium,
+    productsOutOfStock,
+    policiesCustomerAndPremium
 }

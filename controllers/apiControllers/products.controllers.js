@@ -11,8 +11,7 @@ class ProductController {
     async getProducts (req, res) {
 
         let { query, page, limit, sort } = req.query
-    
-    
+
         if(sort == 'asc'){
             sort = 1
         } else if( sort == 'desc'){
@@ -105,7 +104,7 @@ class ProductController {
                     name: 'ID INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${pid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -131,7 +130,7 @@ class ProductController {
                 name: 'CAMPOS OBLIGATORIOS',
                 message: 'Todos los campos son obligatorios',
                 cause: productErrorInfo({ title, description, price, category, code, stock }),
-                code: EErrors.INVALID_TYPES_ERROR,
+                code: EErrors.CAMPOS_OBLIGATORIOS,
                 statusCode: 400
             }))
             return
@@ -145,9 +144,21 @@ class ProductController {
             }))
             return
         } else {
-            req.io.emit('addProduct', body);
-            await productManager.addProduct(body)
-            res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
+            if(req.user.role == 'Premium'){
+                req.io.emit('addProduct', {
+                    ...body,
+                    owner: req.user.email
+                });
+                await productManager.addProduct({
+                    ...body,
+                    owner: req.user.email
+                })
+                res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
+            } else{
+                req.io.emit('addProduct', body);
+                await productManager.addProduct(body)
+                res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
+            }
         }
         
     }
@@ -168,7 +179,7 @@ class ProductController {
                 name: 'ID INEXISTENTE',
                 message: 'El id ingresado es inexistente',
                 cause: `El id: ${pid} que ingresaste es inexistente`,
-                code: EErrors.INVALID_TYPES_ERROR,
+                code: EErrors.ID_INEXISTENTE,
                 statusCode: 401
             }))
     
@@ -188,21 +199,48 @@ class ProductController {
         try {
             
             const productId = await productManager.getProductById( pid )
-            
-            const result = await productManager.deleteProduct(pid)
-            if (result.deletedCount >= 1) {
-                req.io.emit('deleteProduct', productId.code)
-                res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+
+            if(!productId){
+                next(CustomError.createError({
+                    name: 'ID INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${pid} que ingresaste es inexistente`,
+                    code: EErrors.ID_INEXISTENTE,
+                    statusCode: 401
+                }))
                 return
             }
             
-            next(CustomError.createError({
-                name: 'ID INEXISTENTE',
-                message: 'El id ingresado es inexistente',
-                cause: `El id: ${pid} que ingresaste es inexistente`,
-                code: EErrors.INVALID_TYPES_ERROR,
-                statusCode: 401
-            }))
+            const premium = productId.owner == 'admin'
+
+            if(req.user.role == 'admin'){
+                const result = await productManager.deleteProduct(pid)
+                if (result.deletedCount >= 1) {
+                    req.io.emit('deleteProduct', productId.code)
+                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+                    return
+                }
+                
+            } else {
+                if(premium){
+                    next(CustomError.createError({
+                        name: 'PERMISO BLOQUEADO',
+                        message: 'El usuario no puede eliminar este producto',
+                        cause: `el usuario: ${req.user.email}, no tiene los permisos necesarios para eliminar este producto`,
+                        code: EErrors.PERMISOS_BLOQUEADOS,
+                        statusCode: 401
+                    }))
+                    return
+                } 
+
+                const result = await productManager.deleteProduct(pid)
+                if (result.deletedCount >= 1) {
+                    req.io.emit('deleteProduct', productId.code)
+                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+                    return
+                }
+            }
+            
             
         } catch (error) {
             logger.error(error)

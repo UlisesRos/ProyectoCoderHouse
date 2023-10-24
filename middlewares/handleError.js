@@ -25,6 +25,13 @@ function handleError (error, req, res, next) {
                 message: error.message
             })
             break;
+        case EErrors.PERMISOS_BLOQUEADOS:
+            res.status(error.statusCode).send({
+                status: error.statusCode,
+                error: error.name,
+                message: error.message
+            })
+            break;
     
         default:
             res.send({

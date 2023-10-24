@@ -40,7 +40,7 @@ class CartController {
                     name: 'ID INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -62,18 +62,19 @@ class CartController {
         try {
             const cartId = await cartManager.getCartById( cid )
             const productId = await productManager.getProductById( idProduct )
-    
+
+            
             if(!cartId){
                 next(CustomError.createError({
                     name: 'ID DEL CARRITO INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
             }
-    
+            
             if(!productId){
                 next(CustomError.createError({
                     name: 'ID DEL PRODUCTO INEXISTENTE',
@@ -85,8 +86,25 @@ class CartController {
                 return
             }
             
-            await cartManager.addProductCart( cid, idProduct )
-            res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${ cid }`})
+            const premium = productId.owner == 'admin'
+            if(req.user.role == 'Customer'){
+                await cartManager.addProductCart( cid, idProduct )
+                res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${ cid }`})
+            } else if(req.user.role == 'Premium'){
+                if(!premium){
+                    next(CustomError.createError({
+                        name: 'PERMISO BLOQUEADO',
+                        message: 'El usuario no puede eliminar este producto',
+                        cause: `el usuario: ${req.user.email}, no tiene los permisos necesarios para eliminar este producto`,
+                        code: EErrors.PERMISOS_BLOQUEADOS,
+                        statusCode: 401
+                    }))
+                    return
+                }
+
+                await cartManager.addProductCart( cid, idProduct )
+                res.status(202).send({Accepted: `Se ha agregado un producto al carrito con id: ${ cid }`})
+            }
             
         } catch (error) {
             logger.error(error)
@@ -106,7 +124,7 @@ class CartController {
                     name: 'ID DEL CARRITO INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -144,7 +162,7 @@ class CartController {
                     name: 'ID DEL CARRITO INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -171,7 +189,7 @@ class CartController {
                     name: 'ID DEL CARRITO INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -202,7 +220,7 @@ class CartController {
                     name: 'ID DEL CARRITO INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${cid} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -213,7 +231,7 @@ class CartController {
                     name: 'ID DEL PRODUCT INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${idProduct} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -316,7 +334,7 @@ class CartController {
         
                 const template = `
                     <h2>¡Hola ${cart.user.first_name}!</h2>
-                    <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>
+                    <h3>Tu compra fue realizada con exito. Aqui te dejamos el ticket de compra.</h3>    
                     <br>
                     <div style="border: solid 1px black; width: 310px;">
                         <h3 style="font-weight: bold; color: black; text-align: center;">Comprobante de Compra</h3>
@@ -331,8 +349,10 @@ class CartController {
         
                     <h3>¡Muchas gracias, te esperamos pronto!</h3>
                 `
+
+                const subject = 'Compra realizada'
         
-                mailSenderService.send(order.purchaser, template)
+                mailSenderService.send(subject, order.purchaser, template)
         
                 res.status(202).send(
                     {
@@ -369,7 +389,7 @@ class CartController {
                     name: 'ID DE LA ORDEN INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${id} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return
@@ -395,7 +415,7 @@ class CartController {
                     name: 'ID DE LA ORDEN INEXISTENTE',
                     message: 'El id ingresado es inexistente',
                     cause: `El id: ${id} que ingresaste es inexistente`,
-                    code: EErrors.INVALID_TYPES_ERROR,
+                    code: EErrors.ID_INEXISTENTE,
                     statusCode: 401
                 }))
                 return

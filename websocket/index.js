@@ -24,7 +24,7 @@ async function SocketManager (socket) {
 
     // Eliminar producto por el ADMIN
     socket.on('deleteProduct', (productId) => {
-
+        
         productManager.deleteProduct(productId)
 
     })

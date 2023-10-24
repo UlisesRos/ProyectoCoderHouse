@@ -58,6 +58,7 @@ const userErrorInfo = (u) => {
     - Last Name: ${u.last_name}
     - Email: ${u.email}
     - Age: ${u.age}
+    - Role: ${u.role}
     - Password: ${u.password}
 
     COMPLETA EL CAMPO QUE DICE UNDEFINED

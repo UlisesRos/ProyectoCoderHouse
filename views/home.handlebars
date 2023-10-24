@@ -47,6 +47,9 @@
                             <button class="uk-button uk-button-secondary uk-button-small uk-border-rounded botonE">Editar Producto</button>
                         </a>
                     {{/if}}
+                    {{#if ../user.isPremium}}
+                        <button onclick="addToCart(`{{../idCart}},{{this.id}}`)" class="uk-button uk-button-secondary uk-button-small uk-border-rounded boton" >Agregar al carrito</button>
+                    {{/if}}
                 </div>
             </div>
         </div>

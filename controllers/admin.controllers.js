@@ -15,7 +15,8 @@ class AdminController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             idCart: cart._id
         })
@@ -30,17 +31,26 @@ class AdminController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null
         })
     }
 
     // Creacion de un nuevo producto solo por el ADMIN
     async addProductAdmin (req, res) {
+        if(req.user.role == 'Premium'){
+            await productManager.addProduct({
+                ...req.body,
+                owner: req.user.email
+            })
 
-        await productManager.addProduct(req.body)
-    
-        res.redirect('/admin/admin')
+            res.redirect('/admin/admin')
+        } else {
+            await productManager.addProduct(req.body)
+        
+            res.redirect('/admin/admin')
+        }
     }
 
     // Editar un producto existente solo por el ADMIN

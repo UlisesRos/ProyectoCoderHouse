@@ -71,7 +71,8 @@ class HomeController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             idCart: cart._id,
             products,
@@ -142,7 +143,8 @@ class HomeController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             idCart: cart._id,
             products,
@@ -208,7 +210,8 @@ class HomeController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             idCart: cart._id,
             products,
@@ -241,7 +244,8 @@ class HomeController {
             user:  req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             products,
             falseCart: !cartId.products.length,
@@ -282,7 +286,8 @@ class HomeController {
                     user: req.user ? {
                         ...req.user,
                         isAdmin: req.user.role == 'admin',
-                        isPublic: req.user.role == 'Customer'
+                        isPublic: req.user.role == 'Customer',
+                        isPremium: req.user.role == 'Premium'
                     } : null,
                     idCart: cartId._id,
                     style: 'order'
@@ -377,7 +382,8 @@ class HomeController {
             user: req.user ? {
                 ...req.user,
                 isAdmin: req.user.role == 'admin',
-                isPublic: req.user.role == 'Customer'
+                isPublic: req.user.role == 'Customer',
+                isPremium: req.user.role == 'Premium'
             } : null,
             idCart: cartId._id,
             style: 'order',

@@ -10,6 +10,7 @@ const schema = new Schema({
     stock: {type: Number, default: 0},
     category: String,
     thumbnail: {type: [String], default: []},
+    owner: { type: String, default: 'admin' }
 })
 
 schema.plugin(paginate)

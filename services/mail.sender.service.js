@@ -15,10 +15,10 @@ class MailSender {
         })
     }
 
-    async send( to, body ) {
+    async send( subject, to, body ) {
         const response = await this.transporter.sendMail({
             from: 'ecommerce@ecommerce.com',
-            subject: 'Compra realizada',
+            subject: subject,
             to,
             html: body
         })

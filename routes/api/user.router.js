@@ -13,4 +13,8 @@ router.put('/:id', userController.updateUser)
 
 router.delete('/:id', userController.deleteUser)
 
+router.get('/premium/:uid', userController.premiumCustomer)
+
+router.get('/premiumC/:uid', userController.premiumCustomerView)
+
 module.exports = router

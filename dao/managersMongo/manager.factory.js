@@ -3,6 +3,7 @@ const cartManager = require('./cart.manager')
 const chatMessageManager = require('./chat.message.manager')
 const userManager = require('./user.manager')
 const purchaseManager = require('./purchase.manager')
+const tokenPasswordManager = require('./token.password.manager')
 
 const productManagerFile = require('../managers/ProductManager')
 const cartManagerFile = require('../managers/CartManager')
@@ -31,6 +32,8 @@ class ManagerFactory {
 
                 case 'purchases': 
                     return purchaseManager;
+                case 'tokenPassword':
+                    return tokenPasswordManager
             }
         } else {
             // EJECUTO LOS MANAGERS DE FILESYSTEM
