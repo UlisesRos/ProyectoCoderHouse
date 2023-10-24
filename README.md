@@ -88,3 +88,16 @@ Se editaran los siguientes puntos de nuestro login:
 3. Cambiamos todos los console.log() de nuestro servidor por los diferentes loggers.
 4. Creamos un transporte de archivos para enviar los logger de error al archivo error.log.
 5. Creamos un endpoint /api/loggerTest que permitira probar todos los logs.
+
+# Implementacion de nuevos aspectos al proyecto
+1. Realizamos un sistema de recuperacion de contraseña, la cual envie por medio de un correo un boton que redireccione a una pagina para restablecer la contraseña. (no recuperarla).
+2. Establecimos un nuevo rol para el Schema del usuario llamado 'Premium' el cual estara habilitado tambien para crear productos.
+3. Modificamos el schema de producto para contar con un campo “owner”, el cual haga referencia a la persona que creó el producto.
+4. Modificamos los permisos de eliminación de productos para que:
+    Un usuario premium sólo pueda borrar los productos que le pertenecen.
+    El admin pueda borrar cualquier producto, aún si es de un owner.
+5.  Modificamos la lógica de carrito para que un usuario premium NO pueda agregar a su carrito un producto que le pertenece.
+6. Implementamos una nueva ruta en el router de api/users, la cual será /api/users/premium/:uid  la cual permitirá cambiar el rol de un usuario, de “user” a “premium” y viceversa.
+
+
+
