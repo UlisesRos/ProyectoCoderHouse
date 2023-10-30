@@ -18,7 +18,7 @@ router.post('/:cid/products/:idProduct', policiesCustomerAndPremium, cartControl
 router.delete('/:cid/products/:idProduct', cartController.deleteProductCart)
 
 router.delete('/:cid', cartController.deleteCart)
-    
+
 router.put('/:cid', cartController.updateCart)
 
 router.put('/:cid/:product/:idProduct', cartController.updateProductCart)

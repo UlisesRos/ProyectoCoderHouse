@@ -6,6 +6,8 @@
     const path = require('path')
 
     const express = require('express')
+    const swaggerJsDoc = require('swagger-jsdoc')
+    const swaggerUiExpress = require('swagger-ui-express')
     const handlebars = require('express-handlebars')
     const { Server } = require('socket.io')
     const mongoDB = require('./services/mongo.db')
@@ -34,6 +36,18 @@
         const io = new Server(server) // SOCKET
         
         app.use(loggerMiddleware)
+
+        // Documentacion swagger
+        const specs = swaggerJsDoc({
+            definition: {
+                openapi: '3.0.1',
+                info: {
+                    title: 'eCommerce API',
+                    description: 'Documentacion para el eCommerce API'
+                }
+            },
+            apis: [`${__filename}/../doc/**/*.yaml`]
+        })
 
         //handlebars
         app.engine('handlebars', handlebars.engine({
@@ -88,6 +102,9 @@
         
         // ruta de las api
         app.use('/api', api)
+
+        // ruta de la documentacion
+        app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
         app.use(handleError)
         

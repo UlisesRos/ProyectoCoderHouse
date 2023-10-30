@@ -99,5 +99,11 @@ Se editaran los siguientes puntos de nuestro login:
 5.  Modificamos la lógica de carrito para que un usuario premium NO pueda agregar a su carrito un producto que le pertenece.
 6. Implementamos una nueva ruta en el router de api/users, la cual será /api/users/premium/:uid  la cual permitirá cambiar el rol de un usuario, de “user” a “premium” y viceversa.
 
+# Documentacion de nuestro proyecto
+1. En esta seccion pudimos documentar los modulos de productos y carrito en SWAGGER. 
+2. Realizamos la configuracion necesaria para poder ejecutarlo de la mejor manera.
+3. Creamos un endpoint llamado: /apidocs para poder ver esta documentacion.
+
+
 
 

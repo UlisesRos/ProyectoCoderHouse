@@ -27,7 +27,12 @@ class UserController {
             })
         } else{
             const users = await userManager.getUsers()
-            res.send(users)
+            const usuarioSinPassword = users.map(user => {
+                // Crea una copia del objeto de usuario excluyendo la contraseña
+                const { password, ...usuarioSinPassword } = user;
+                return usuarioSinPassword;
+            });
+            res.send(usuarioSinPassword)
         }
     
     }
@@ -48,8 +53,8 @@ class UserController {
                 }))
                 return
             }
-    
-            res.send(userId)
+            const {password, ...usuarioSinPassword} = userId
+            res.send(usuarioSinPassword)
         } catch (error) {
             logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
