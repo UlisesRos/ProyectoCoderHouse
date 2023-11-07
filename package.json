@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon app.js",
     "seed:products": "node ./scripts/seed.productos.js",
-    "artillery": "artillery quick --count 40 --num 50 http://localhost:8080/api/test/simple -o simple.json"
+    "artillery": "artillery quick --count 40 --num 50 http://localhost:8080/api/test/simple -o simple.json",
+    "test": "mocha test/integration.test.js"
   },
   "keywords": [],
   "author": "",
@@ -14,9 +15,12 @@
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",
     "artillery": "^2.0.0-37",
+    "chai": "^4.3.10",
     "handlebars": "^4.7.8",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
-    "passport-github2": "^0.1.12"
+    "passport-github2": "^0.1.12",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.5",

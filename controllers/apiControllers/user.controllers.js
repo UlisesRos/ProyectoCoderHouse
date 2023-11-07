@@ -88,9 +88,9 @@ class UserController {
             }))
         } else{
     
-            await userManager.addUser( body )
+            const result = await userManager.addUser( body )
             res.status(201).send({
-                Created: `El usuario ha sido creado con exito. ¡Bienvenido ${body.last_name}!`
+                Created: `El usuario ha sido creado con exito. ¡Bienvenido ${body.last_name}!`, payload: result
             })
     
         }

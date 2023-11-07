@@ -104,6 +104,11 @@ Se editaran los siguientes puntos de nuestro login:
 2. Realizamos la configuracion necesaria para poder ejecutarlo de la mejor manera.
 3. Creamos un endpoint llamado: /apidocs para poder ver esta documentacion.
 
+# Modulos de testing para nuestro proyecto
+1. Realizamos módulos de testing para nuestro proyecto, utilizando los módulos de mocha + chai + supertest.
+2. Para poder ejecutarlo debemos ejecutar npm run test en nuestra consola. (No olvidemos tener levantado el servidor)
+
+
 
 
 

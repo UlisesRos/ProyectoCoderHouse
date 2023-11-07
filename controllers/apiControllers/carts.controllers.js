@@ -15,8 +15,8 @@ class CartController {
     // Creacion de un nuevo CARRITO
     async addCart (req, res) {
     
-        await cartManager.addCart()
-        res.status(201).send({Created: 'El carrito fue creado con exito!'})
+        const result = await cartManager.addCart()
+        res.status(201).send({Created: 'El carrito fue creado con exito!', payload: result})
     
     }
 
@@ -150,7 +150,7 @@ class CartController {
         }
     }
 
-    // Eliminar carrito
+    // Eliminar todos los productos del carrito
     async deleteCart (req, res, next) {
         const { cid } = req.params
     
@@ -170,6 +170,33 @@ class CartController {
             
             await cartManager.deleteProductsCart( cid )
             res.status(202).send({ Accepted: `Se eliminaron todos los productos del carrito con id: ${cid}`})
+    
+        } catch (error) {
+            logger.error(error)
+            res.status(500).send({ error: 'Ocurrio un error en el sistema'})
+        }
+    }
+
+    // Eliminar carrito
+    async deleteEntireCart(req, res, next) {
+        const { cid } = req.params
+    
+        try {
+            const cartId = await cartManager.getCartById( cid )
+    
+            if(!cartId){
+                next(CustomError.createError({
+                    name: 'ID DEL CARRITO INEXISTENTE',
+                    message: 'El id ingresado es inexistente',
+                    cause: `El id: ${cid} que ingresaste es inexistente`,
+                    code: EErrors.ID_INEXISTENTE,
+                    statusCode: 401
+                }))
+                return
+            }
+            
+            await cartManager.deleteCart( cid )
+            res.status(202).send({ Accepted: `Se elimino el carrito con id: ${cid}`})
     
         } catch (error) {
             logger.error(error)

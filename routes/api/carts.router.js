@@ -19,6 +19,8 @@ router.delete('/:cid/products/:idProduct', cartController.deleteProductCart)
 
 router.delete('/:cid', cartController.deleteCart)
 
+router.delete('/:cid/delete', cartController.deleteEntireCart)
+
 router.put('/:cid', cartController.updateCart)
 
 router.put('/:cid/:product/:idProduct', cartController.updateProductCart)

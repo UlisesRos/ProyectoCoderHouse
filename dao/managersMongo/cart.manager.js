@@ -91,6 +91,14 @@ class CartManager {
         cart.save()
     }
 
+    async deleteCart(cid) {
+
+        const result = await cartModel.deleteOne({ _id: cid })
+
+        return result
+        
+    }
+
     async updateCart (cid, product){
 
         // ID DEL CARRITO

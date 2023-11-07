@@ -149,15 +149,15 @@ class ProductController {
                     ...body,
                     owner: req.user.email
                 });
-                await productManager.addProduct({
+                const result = await productManager.addProduct({
                     ...body,
                     owner: req.user.email
                 })
-                res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
+                res.status(201).send({Created: `El Producto ${title} fue creado con exito`, payload: result})
             } else{
                 req.io.emit('addProduct', body);
-                await productManager.addProduct(body)
-                res.status(201).send({Created: `El Producto ${title} fue creado con exito`})
+                const result = await productManager.addProduct(body)
+                res.status(201).send({Created: `El Producto ${title} fue creado con exito`, payload: result})
             }
         }
         
@@ -217,7 +217,7 @@ class ProductController {
                 const result = await productManager.deleteProduct(pid)
                 if (result.deletedCount >= 1) {
                     req.io.emit('deleteProduct', productId.code)
-                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`, payload: result})
                     return
                 }
                 
@@ -236,7 +236,7 @@ class ProductController {
                 const result = await productManager.deleteProduct(pid)
                 if (result.deletedCount >= 1) {
                     req.io.emit('deleteProduct', productId.code)
-                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`})
+                    res.status(200).send({OK: `El producto con id: ${pid} ha sido eliminado.`, payload: result})
                     return
                 }
             }
