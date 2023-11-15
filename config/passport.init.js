@@ -24,7 +24,7 @@ const init = () => {
 
     passport.deserializeUser( async (id, done) => {
         const user = await userManager.getUserById(id)
-
+        
         done(null, user)
     })
 }

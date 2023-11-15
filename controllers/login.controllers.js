@@ -52,17 +52,28 @@ class LoginController {
     }
 
     // Mostrar Logout
-    getLogout (req, res) {
-        const { first_name, last_name } = req.user
+    async getLogout (req, res) {
+        const { first_name, last_name, _id } = req.user
+
+        //FECHA
+        const today = new Date()
+        const hoy = today.toLocaleString()
     
-        req.logOut((err) => {
+    
+        req.logOut(async (err) => {
+
             if(!err){
+                let user = await userManager.getUserById(_id)
+                await userManager.updateUser(_id, {...user, last_connection: `Disconnect ${hoy}`})
+
                 res.render('logout', {
                     name: `${first_name} ${last_name}`,
                     style: 'login'
                 })
+                
             }
         })
+
     }
 
     // Mostrar resetPassword

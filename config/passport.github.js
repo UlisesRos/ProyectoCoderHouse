@@ -12,6 +12,10 @@ const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CL
 
 const gitHubUser = async (profile, done) => {
 
+     //FECHA
+    const today = new Date()
+    const hoy = today.toLocaleString()
+
     logger.info(profile._json)
     const { name, email } = profile._json
     const _user = await userManager.getUserByEmail( email )
@@ -25,7 +29,8 @@ const gitHubUser = async (profile, done) => {
             last_name: name.split(" ")[1],
             email: email,
             password: "",
-            cart: cart
+            cart: cart,
+            last_connection: `Connect ${hoy}`
         }
 
         const result = await userManager.addUser(newUser)
@@ -35,9 +40,11 @@ const gitHubUser = async (profile, done) => {
 
     // SI EL USUARIO YA EXISTE
     logger.warn('El usuario ya existe, rol asignado: ', _user?.role)
+    await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${hoy}`})
     return done(null, _user)
 
 }
+
 const profileController = async ( accessToken, refreshToken, profile, done ) => {
     try {
 

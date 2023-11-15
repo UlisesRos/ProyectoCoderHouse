@@ -5,6 +5,8 @@ const { userErrorInfo, errorExistingUser } = require('../../errors/info.error')
 const logger = require('../../logger/index')
 
 const userManager = ManagerFactory.getManagerInstance('users')
+const cartManager = ManagerFactory.getManagerInstance('carts')
+
 
 class UserController {
 
@@ -160,7 +162,7 @@ class UserController {
     
     }
 
-    // Cambiar usuario PREMIUM a CUSTOMER
+    // CAMBIAR USUARIOS PREMIUM a CUSTOMER Y VICEVERSA
 
     async premiumCustomer (req, res, next){
         const uid = req.params.uid
@@ -180,6 +182,23 @@ class UserController {
             }
     
             if(userId.role == 'Customer'){
+
+                const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
+                const verificacionOK = verificacion.every(ver => 
+                    userId.documents.some(obj => obj.name === ver)
+                )
+
+                if(!verificacionOK){
+                    next(CustomError.createError({
+                        name: 'PERMISO BLOQUEADO',
+                        message: 'El usuario no puede ser un Customer/Premium',
+                        cause: `el usuario: ${userId.first_name}, no tiene los permisos necesarios para ser un Customer/Premium`,
+                        code: EErrors.PERMISOS_BLOQUEADOS,
+                        statusCode: 401
+                    }))
+                    return
+                }
+
                 const user = await userManager.updateUser(uid, {role: 'Premium'})
                 if(user.matchedCount >= 1){
                     logger.info(`El usuario ${userId.first_name} paso a ser Premium`)
@@ -221,6 +240,28 @@ class UserController {
             const userId = await userManager.getUserById(uid)
     
             if(userId.role == 'Customer'){
+
+                const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
+                const verificacionOK = verificacion.every(ver => 
+                    userId.documents.some(obj => obj.name === ver)
+                )
+
+                if(!verificacionOK){
+                    const cartId = await cartManager.getCartById(req.user.cart._id)
+                    res.render('errorCarrito', {
+                        title: '¡No tienes permisos para pasar a ser Premium!',
+                        user: req.user ? {
+                            ...req.user,
+                            isAdmin: req.user.role == 'admin',
+                            isPublic: req.user.role == 'Customer',
+                            isPremium: req.user.role == 'Premium'
+                        } : null,
+                        idCart: cartId._id,
+                        style: 'order'
+                    })
+                    return
+                }
+
                 const user = await userManager.updateUser(uid, {role: 'Premium'})
                 if(user.matchedCount >= 1){
                     logger.info(`El usuario ${userId.first_name} paso a ser Premium`)
@@ -247,6 +288,47 @@ class UserController {
 
     }
 
+    // CREACION DE DOCUMENTOS
+
+    async postDocuments ( req, res ){
+
+        const { uid } = req.params
+        const user = await userManager.getUserById(uid)
+
+        if(!user.documents){
+            await userManager.updateUser(
+                uid,
+                {
+                    ...user,
+                    documents: [
+                        {
+                        name: req.body.name,
+                        reference: req.file.path,
+                        tipo: req.body.tipo
+                        }
+                    ]
+                }
+            )
+        } else {
+            await userManager.updateUser(
+                uid,
+                {
+                    ...user,
+                    documents: [
+                        ...user.documents,
+                        {
+                        name: req.body.name,
+                        reference: req.file.path,
+                        tipo: req.body.tipo
+                        }
+                    ]
+                }
+            )
+        }
+
+
+        res.send('OK')
+    }
 }
 
 module.exports = new UserController()

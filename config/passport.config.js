@@ -14,6 +14,10 @@ const signup = async ( req, email, password, done ) => {
 
     const _user = await userManager.getUserByEmail( email )
 
+    //FECHA
+    const today = new Date()
+    const hoy = today.toLocaleString()
+
     if(_user){
         logger.warn('El usuario ya existe.')
         return done(null, false)
@@ -26,7 +30,8 @@ const signup = async ( req, email, password, done ) => {
         const newUser = await userManager.addUser({
             ...user,
             password: hashPassword(password),
-            cart: cart
+            cart: cart,
+            last_connection: `Connect ${hoy}`
         })
 
         let cartId = await cartManager.getCartById(newUser.cart._id)
@@ -49,9 +54,13 @@ const signup = async ( req, email, password, done ) => {
 
 const login = async ( email, password, done ) => {
 
+    //FECHA
+    const today = new Date()
+    const hoy = today.toLocaleString()
+
     try {
         
-        const _user = await userManager.getUserByEmail( email )
+        let _user = await userManager.getUserByEmail( email )
 
         if(!_user){
             logger.war('Contraseña o Usuario incorrecto')
@@ -66,8 +75,9 @@ const login = async ( email, password, done ) => {
             logger.warn('Contraseña o Usuario incorrecto')
             return done(null, false)
         }
-        
-        done(null, _user)
+
+        await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${hoy}`})
+        return done(null, _user)
 
     } catch (error) {
         logger.error('Ha ocurrido un error')

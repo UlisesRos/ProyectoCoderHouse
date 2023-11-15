@@ -108,6 +108,15 @@ Se editaran los siguientes puntos de nuestro login:
 1. Realizamos módulos de testing para nuestro proyecto, utilizando los módulos de mocha + chai + supertest.
 2. Para poder ejecutarlo debemos ejecutar npm run test en nuestra consola. (No olvidemos tener levantado el servidor)
 
+# Documentos e Imagenes con Multer.
+1. Primer agregamos una propiedad last_connection al usuario para que ecuando este se conecte y se desconecte quede registrado dentro de la propiedad con la fecha y la hora que lo hizo.
+2. Luego, agregamos multer en nuestro proyecto para que el usuario pueda agregar imagenes o documentos. Esto se podra hacer a traves del endpoint: /users/:uid/documents
+3. Estos documentos deberan tener algunas propiedades en el body a la hora pasarlos: name, tipo, ext y file. 
+4. En el usuario se agrego la propiedad documents, donde nos dira que archivos subio este usuario.
+5. Un usuario customer solo podra pasar a ser premium si subio 3 archivos importantes: Identificacion, Comprobante de Domicilio y Comprobante de estado de cuenta.
+
+
+
 
 
 
