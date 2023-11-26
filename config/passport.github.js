@@ -5,9 +5,7 @@ const cartManager = ManagerFactory.getManagerInstance('carts')
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, PORT, HOST, GITHUB_STRATEGY_NAME } = require('./config')
 const logger = require('../logger/index')
 
-const port = PORT || 8080
-
-const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: 'https://proyectocoderhouse.up.railway.app/githubSessions' }
+const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: `http://${HOST}:${PORT}/githubSessions` }
 
 
 // LOGICA DEL USUARIO
