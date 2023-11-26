@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "dev": "nodemon app.js",
+    "start": "node app.js",
     "seed:products": "node ./scripts/seed.productos.js",
     "artillery": "artillery quick --count 40 --num 50 http://localhost:8080/api/test/simple -o simple.json",
     "test": "mocha test/integration.test.js"
