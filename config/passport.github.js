@@ -7,7 +7,7 @@ const logger = require('../logger/index')
 
 const port = PORT || 8080
 
-const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: `https://proyectocoderhouse.up.railway.app//githubSessions` }
+const GitHubAccessConfig = { clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callBackURL: 'https://proyectocoderhouse.up.railway.app/githubSessions' }
 
 
 // LOGICA DEL USUARIO
