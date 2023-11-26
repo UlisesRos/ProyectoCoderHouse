@@ -115,9 +115,10 @@
         // WEB SOCKET
         io.on('connection', SocketManager)
         
+        const port = PORT || 8080
         
-        server.listen(PORT, () => {
-            logger.info(`Servidor leyendose desde http://${HOST}:${PORT}`)
+        server.listen(port, () => {
+            logger.info(`Servidor leyendose desde http://${HOST}:${port}`)
         })
 
         logger.warn('Se ha conectado a la base de datos de MongoDb')
