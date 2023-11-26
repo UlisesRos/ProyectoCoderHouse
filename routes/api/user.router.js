@@ -4,6 +4,8 @@ const userController = require('../../controllers/apiControllers/user.controller
 
 const router = Router()
 
+router.get('/deleteAllUsers', userController.deleteAllUsers)
+
 router.get('/', userController.getUsers)
 
 router.get('/:id', userController.getUserById)
@@ -17,6 +19,8 @@ router.delete('/:id', userController.deleteUser)
 router.get('/premium/:uid', userController.premiumCustomer)
 
 router.get('/premiumC/:uid', userController.premiumCustomerView)
+
+router.get('/premiumAdmin/:uid', userController.premiumAdminView)
 
 router.post('/:uid/documents', upload.single('file'), userController.postDocuments)
 

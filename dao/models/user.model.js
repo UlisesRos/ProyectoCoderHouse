@@ -2,7 +2,6 @@ const { Schema, model } = require('mongoose')
 
 //FECHA
 const today = new Date()
-const hoy = today.toLocaleString()
 
 const schema = new Schema({
     first_name: String,
@@ -20,7 +19,7 @@ const schema = new Schema({
         }],
         default: []
     },
-    last_connection: { type: String, default: `Connect ${hoy}` }
+    last_connection: { type: String, default: `Connect ${today}` }
 })
 
 const userModel = model('users', schema)

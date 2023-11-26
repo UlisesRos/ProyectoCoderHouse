@@ -22,6 +22,7 @@ class MailSender {
             to,
             html: body
         })
+
     }   
 }
 

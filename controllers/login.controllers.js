@@ -40,6 +40,7 @@ class LoginController {
         const cart = await cartManager.getCartById(req.user.cart._id)
         res.render('profile', {
             ...req.user,
+            title: `Perfil de ${req.user.first_name}`,
             style: 'profile',
             user: req.user ? {
                 ...req.user,
@@ -56,15 +57,13 @@ class LoginController {
         const { first_name, last_name, _id } = req.user
 
         //FECHA
-        const today = new Date()
-        const hoy = today.toLocaleString()
-    
+        const today = new Date()    
     
         req.logOut(async (err) => {
 
             if(!err){
                 let user = await userManager.getUserById(_id)
-                await userManager.updateUser(_id, {...user, last_connection: `Disconnect ${hoy}`})
+                await userManager.updateUser(_id, {...user, last_connection: `Disconnect ${today}`})
 
                 res.render('logout', {
                     name: `${first_name} ${last_name}`,
@@ -73,6 +72,7 @@ class LoginController {
                 
             }
         })
+
 
     }
 

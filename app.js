@@ -24,6 +24,7 @@
     const { isValidPassword } = require('./utils/password.js')
     const logger = require('./logger/index')
     const loggerMiddleware = require('./middlewares/logger.middleware')
+    const eliminarUsuariosInactivosMiddleware = require('./middlewares/eliminarUsuariosInactivosMiddleware.js')
 
     try {
         
@@ -36,7 +37,7 @@
         const io = new Server(server) // SOCKET
         
         app.use(loggerMiddleware)
-
+        
         // Documentacion swagger
         const specs = swaggerJsDoc({
             definition: {
@@ -64,7 +65,7 @@
         app.use(express.json())
         app.use('/static', express.static(path.join(__dirname + '/public')))
         app.use(cookieParser('secret'))
-
+        
         app.use(session({
             secret: 'secret',
             resave: true,
@@ -74,7 +75,10 @@
                 ttl: 60 * 60
             })
         }))
-
+        
+        // Ejecutamos funcion de eliminar usuarios inactivos
+        eliminarUsuariosInactivosMiddleware()
+        
         //Registramos los middlewares de passport
         initPassportLocal()
         app.use(passport.initialize())

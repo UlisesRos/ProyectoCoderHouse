@@ -14,7 +14,6 @@ const gitHubUser = async (profile, done) => {
 
      //FECHA
     const today = new Date()
-    const hoy = today.toLocaleString()
 
     logger.info(profile._json)
     const { name, email } = profile._json
@@ -30,7 +29,7 @@ const gitHubUser = async (profile, done) => {
             email: email,
             password: "",
             cart: cart,
-            last_connection: `Connect ${hoy}`
+            last_connection: `Connect ${today}`
         }
 
         const result = await userManager.addUser(newUser)
@@ -40,7 +39,7 @@ const gitHubUser = async (profile, done) => {
 
     // SI EL USUARIO YA EXISTE
     logger.warn('El usuario ya existe, rol asignado: ', _user?.role)
-    await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${hoy}`})
+    await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${today}`})
     return done(null, _user)
 
 }

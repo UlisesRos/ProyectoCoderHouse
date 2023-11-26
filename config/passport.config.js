@@ -16,7 +16,6 @@ const signup = async ( req, email, password, done ) => {
 
     //FECHA
     const today = new Date()
-    const hoy = today.toLocaleString()
 
     if(_user){
         logger.warn('El usuario ya existe.')
@@ -31,7 +30,7 @@ const signup = async ( req, email, password, done ) => {
             ...user,
             password: hashPassword(password),
             cart: cart,
-            last_connection: `Connect ${hoy}`
+            last_connection: `Connect ${today}`
         })
 
         let cartId = await cartManager.getCartById(newUser.cart._id)
@@ -56,7 +55,6 @@ const login = async ( email, password, done ) => {
 
     //FECHA
     const today = new Date()
-    const hoy = today.toLocaleString()
 
     try {
         
@@ -76,7 +74,7 @@ const login = async ( email, password, done ) => {
             return done(null, false)
         }
 
-        await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${hoy}`})
+        await userManager.updateUser(_user._id, {..._user, last_connection: `Connect ${today}`})
         return done(null, _user)
 
     } catch (error) {

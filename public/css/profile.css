@@ -2,6 +2,13 @@
     background-color:darkseagreen
 }
 
+#page-title {
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    text-decoration: underline;
+}
+
 .user{
     display: none;
 }

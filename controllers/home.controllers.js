@@ -373,7 +373,9 @@ class HomeController {
             <h3>¡Muchas gracias, te esperamos pronto!</h3>
         `
 
-        mailSenderService.send(order.purchaser, template)
+        const subject = 'Compra realizada'
+
+        mailSenderService.send(subject, order.purchaser, template)
 
         const cartId = await cartManager.getCartById(req.user.cart._id)
 

@@ -354,7 +354,7 @@ class CartController {
                     purchaser: cart.user.email,
                     purchaseDate: hoy
                 }
-        
+
                 purchaseManager.addOrder(order)
         
                 // Envio de Ticket al mail
@@ -391,7 +391,6 @@ class CartController {
             logger.error(error)
             res.status(500).send({ error: 'Ocurrio un error en el sistema'})
         }
-
 
     }
 

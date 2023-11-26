@@ -3,12 +3,20 @@ const CustomError = require('../../errors/custom.error')
 const EErrors = require('../../errors/enum.error')
 const { userErrorInfo, errorExistingUser } = require('../../errors/info.error')
 const logger = require('../../logger/index')
+const eliminarUsuariosInactivosMiddleware = require('../../middlewares/eliminarUsuariosInactivosMiddleware')
 
 const userManager = ManagerFactory.getManagerInstance('users')
 const cartManager = ManagerFactory.getManagerInstance('carts')
 
 
 class UserController {
+
+    async deleteAllUsers (req, res){
+
+        eliminarUsuariosInactivosMiddleware()
+
+        res.status(202).send({Accepted: 'Se ejecuto la funcion para eliminar usuarios inactivos.'})
+    }
 
     // Mostrar usuarios
     async getUsers (req, res) {
@@ -31,7 +39,7 @@ class UserController {
             const users = await userManager.getUsers()
             const usuarioSinPassword = users.map(user => {
                 // Crea una copia del objeto de usuario excluyendo la contraseña
-                const { password, ...usuarioSinPassword } = user;
+                const { _id, password, age, cart, last_connection, documents, ...usuarioSinPassword } = user;
                 return usuarioSinPassword;
             });
             res.send(usuarioSinPassword)
@@ -192,7 +200,7 @@ class UserController {
                     next(CustomError.createError({
                         name: 'PERMISO BLOQUEADO',
                         message: 'El usuario no puede ser un Customer/Premium',
-                        cause: `el usuario: ${userId.first_name}, no tiene los permisos necesarios para ser un Customer/Premium`,
+                        cause: `el usuario: ${userId.first_name}, no tiene la documentacion necesaria para ser un Customer/Premium`,
                         code: EErrors.PERMISOS_BLOQUEADOS,
                         statusCode: 401
                     }))
@@ -249,7 +257,7 @@ class UserController {
                 if(!verificacionOK){
                     const cartId = await cartManager.getCartById(req.user.cart._id)
                     res.render('errorCarrito', {
-                        title: '¡No tienes permisos para pasar a ser Premium!',
+                        title: '¡No posee la documentacion necesarioa para pasar a ser Premium!',
                         user: req.user ? {
                             ...req.user,
                             isAdmin: req.user.role == 'admin',
@@ -275,6 +283,59 @@ class UserController {
                 if(user.matchedCount >= 1){
                     logger.info(`El usuario ${userId.first_name} paso a ser Customer`)
                     res.redirect('/profile')
+                    return
+                }
+            }
+
+        } catch (error) {
+            res.status(500).send({
+                message: 'Ha ocurrido un error en el servidor',
+                exception: error.stack
+            })
+        }
+
+    }
+
+    async premiumAdminView (req, res){
+
+        const uid = req.params.uid
+
+        try {
+            const userId = await userManager.getUserById(uid)
+    
+            if(userId.role == 'Customer'){
+
+                const user = await userManager.updateUser(uid, {role: 'Premium'})
+                if(user.matchedCount >= 1){
+                    logger.info(`El usuario ${userId.first_name} paso a ser Premium`)
+                    res.render('errorCarrito', {
+                        title: 'Se cambio el Rol del Usuario',
+                        style: 'order',
+                        user: req.user ? {
+                            ...req.user,
+                            isAdmin: req.user.role == 'admin',
+                            isPublic: req.user.role == 'Customer',
+                            isPremium: req.user.role == 'Premium'
+                        } : null
+                    })
+                    return
+                }
+            }
+    
+            if(userId.role == 'Premium'){
+                const user = await userManager.updateUser(uid, {role: 'Customer'})
+                if(user.matchedCount >= 1){
+                    logger.info(`El usuario ${userId.first_name} paso a ser Customer`)
+                    res.render('errorCarrito', {
+                        title: 'Se cambio el Rol del Usuario',
+                        style: 'order',
+                        user: req.user ? {
+                            ...req.user,
+                            isAdmin: req.user.role == 'admin',
+                            isPublic: req.user.role == 'Customer',
+                            isPremium: req.user.role == 'Premium'
+                        } : null
+                    })
                     return
                 }
             }

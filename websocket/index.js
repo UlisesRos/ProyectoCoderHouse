@@ -2,7 +2,11 @@ const ManagerFactory = require('../dao/managersMongo/manager.factory')
 
 const chatMessageManager = ManagerFactory.getManagerInstance('chatMessages')
 const cartManager = ManagerFactory.getManagerInstance('carts')
+const userManager = ManagerFactory.getManagerInstance('users')
 const productManager = ManagerFactory.getManagerInstance('products')
+
+const mailSenderService = require('../services/mail.sender.service')
+const logger = require('../logger/index')
 
 async function SocketManager (socket) {
 
@@ -23,9 +27,27 @@ async function SocketManager (socket) {
     })
 
     // Eliminar producto por el ADMIN
-    socket.on('deleteProduct', (productId) => {
-        
-        productManager.deleteProduct(productId)
+    socket.on('deleteProduct', async (productId) => {
+        const product = await productManager.getProductById(productId)
+        const premium = product.owner == 'admin'
+
+        if(!premium){
+            const user = await userManager.getUserByEmail(product.owner)
+            const template = `
+                    <h2>¡Hola ${user.first_name}, ${user.last_name}!</h2>
+                    <h4>Queriamos avisarte que el producto con id: ${product._id} fue eliminado por un usuario Administrador.</h4>    
+                    <br>
+                    <h3>¡Muchas gracias, te esperamos pronto!</h3>
+                `
+
+            const subject = 'Producto Eliminado Por Un Administrador'
+    
+            mailSenderService.send(subject, user.email, template)
+
+            logger.debug(`Fue eliminado un producto premium con id: ${product._id}`)
+        }
+
+        await productManager.deleteProduct(productId)
 
     })
 

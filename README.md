@@ -115,6 +115,11 @@ Se editaran los siguientes puntos de nuestro login:
 4. En el usuario se agrego la propiedad documents, donde nos dira que archivos subio este usuario.
 5. Un usuario customer solo podra pasar a ser premium si subio 3 archivos importantes: Identificacion, Comprobante de Domicilio y Comprobante de estado de cuenta.
 
+# Ultimas modificaciones del Proyecto.
+1. Se modifico la ruta GET de users, para que al mostrar los usuarios solo se muestre le siguiente informacion: Nombre, Apellido, Correo Electronico y ROL del usuario.
+2. Se creo un Middleware con una funcion para eliminar todos los usuarios que estuvieron inactivos durante los ultimos dos dias (A los usuarios que sean eliminados por inactividad se les eliminara automaticamente un mail). Esta se ejecutara automaticamente al levantarse el servidor y luego, se ejecutara cada 1 hora. Tambien se podra ejecutar esta funcion usando el endpoint /api/users/deleteAllUsers.
+3. Se creo una vista para que los Usuarios ADMIN puedan visualizar, modificar el rol y eliminar un Usuario.
+4. Se modifico el endpoint que elimina productos, para que, en caso de que el producto pertenezca a un usuario Premium, le envie un correo electronico indicandole que el producto fue eliminado.
 
 
 

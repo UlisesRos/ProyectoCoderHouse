@@ -5,6 +5,9 @@ const { productErrorInfo, errorExistingProduct } = require('../../errors/info.er
 const logger = require('../../logger/index')
 
 const productManager = ManagerFactory.getManagerInstance('products')
+const userManager = ManagerFactory.getManagerInstance('users')
+
+const mailSenderService = require('../../services/mail.sender.service')
 
 class ProductController {
 
@@ -214,6 +217,26 @@ class ProductController {
             const premium = productId.owner == 'admin'
 
             if(req.user.role == 'admin'){
+
+                if(!premium){
+
+                    const user = await userManager.getUserByEmail(productId.owner)
+
+                    const template = `
+                    <h2>¡Hola ${user.first_name}, ${user.last_name}!</h2>
+                    <h4>Queriamos avisarte que el producto con id: ${productId._id} fue eliminado por un usuario Administrador.</h4>    
+                    <br>
+                    <h3>¡Muchas gracias, te esperamos pronto!</h3>
+                `
+
+                    const subject = 'Producto Eliminado Por Un Administrador'
+            
+                    mailSenderService.send(subject, user.email, template)
+
+                    logger.debug(`Fue eliminado un producto premium con id: ${productId._id}`)
+
+                }
+
                 const result = await productManager.deleteProduct(pid)
                 if (result.deletedCount >= 1) {
                     req.io.emit('deleteProduct', productId.code)
