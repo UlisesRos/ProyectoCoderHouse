@@ -130,7 +130,7 @@ class LoginController {
         setTimeout(async () => {
             await tokenPasswordManager.deleteToken(tokenP.token)
         }, 3600000)
-        const resetLink = `http://localhost:8080/resetpassword?token=${resetToken}`
+        const resetLink = `https://proyectocoderhouse.up.railway.app/resetpassword?token=${resetToken}`
 
         const template = `
         <h2>¡Hola ${user.first_name}!</h2>

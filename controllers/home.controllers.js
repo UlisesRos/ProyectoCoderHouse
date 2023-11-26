@@ -37,30 +37,30 @@ class HomeController {
         // CREACION DE LOS BOTONES SIGUIENTES Y ANTERIOR
     
         if(query){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else {
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
         }
     
         if(sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else{
             
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
         
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
     
         }
         
@@ -109,30 +109,30 @@ class HomeController {
         // CREACION DE LOS BOTONES SIGUIENTES Y ANTERIOR
     
         if(query){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else {
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
         }
     
         if(sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else{
             
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
         
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
     
         }
         
@@ -176,30 +176,30 @@ class HomeController {
         // CREACION DE LOS BOTONES SIGUIENTES Y ANTERIOR
     
         if(query){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else {
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
         }
     
         if(sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&sort=${sort}` : ''
         } else if (query && sort){
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
     
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}&query=${query}&sort=${sort}` : ''
         } else{
             
-            pageInfo.prevLink = pageInfo.hasPrevPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.prevLink = pageInfo.hasPrevPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.prevPage}&limit=${pageInfo.limit}` : ''
         
-            pageInfo.nextLink = pageInfo.hasNextPage ? `http://localhost:8080/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
+            pageInfo.nextLink = pageInfo.hasNextPage ? `https://proyectocoderhouse.up.railway.app/realtimeproducts?page=${pageInfo.nextPage}&limit=${pageInfo.limit}` : ''
     
         }
     
