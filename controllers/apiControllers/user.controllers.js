@@ -191,21 +191,23 @@ class UserController {
     
             if(userId.role == 'Customer'){
 
-                const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
-                const verificacionOK = verificacion.every(ver => 
-                    userId.documents.some(obj => obj.name === ver)
-                )
+                // VERIFICACION PARA VER SI EL USUARIO TIENE LOS DOCUMENTOS NECESARIOS PARA PASAR A SER PREMIUM
 
-                if(!verificacionOK){
-                    next(CustomError.createError({
-                        name: 'PERMISO BLOQUEADO',
-                        message: 'El usuario no puede ser un Customer/Premium',
-                        cause: `el usuario: ${userId.first_name}, no tiene la documentacion necesaria para ser un Customer/Premium`,
-                        code: EErrors.PERMISOS_BLOQUEADOS,
-                        statusCode: 401
-                    }))
-                    return
-                }
+                // const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
+                // const verificacionOK = verificacion.every(ver => 
+                //     userId.documents.some(obj => obj.name === ver)
+                // )
+
+                // if(!verificacionOK){
+                //     next(CustomError.createError({
+                //         name: 'PERMISO BLOQUEADO',
+                //         message: 'El usuario no puede ser un Customer/Premium',
+                //         cause: `el usuario: ${userId.first_name}, no tiene la documentacion necesaria para ser un Customer/Premium`,
+                //         code: EErrors.PERMISOS_BLOQUEADOS,
+                //         statusCode: 401
+                //     }))
+                //     return
+                // }
 
                 const user = await userManager.updateUser(uid, {role: 'Premium'})
                 if(user.matchedCount >= 1){
@@ -249,26 +251,28 @@ class UserController {
     
             if(userId.role == 'Customer'){
 
-                const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
-                const verificacionOK = verificacion.every(ver => 
-                    userId.documents.some(obj => obj.name === ver)
-                )
+                // VERIFICACION PARA VER SI EL USUARIO TIENE LOS DOCUMENTOS NECESARIOS PARA PASAR A SER PREMIUM
 
-                if(!verificacionOK){
-                    const cartId = await cartManager.getCartById(req.user.cart._id)
-                    res.render('errorCarrito', {
-                        title: '¡No posee la documentacion necesarioa para pasar a ser Premium!',
-                        user: req.user ? {
-                            ...req.user,
-                            isAdmin: req.user.role == 'admin',
-                            isPublic: req.user.role == 'Customer',
-                            isPremium: req.user.role == 'Premium'
-                        } : null,
-                        idCart: cartId._id,
-                        style: 'order'
-                    })
-                    return
-                }
+                // const verificacion = ["identificacion", "comprobante de domicilio", "comprobante de estado de cuenta"]
+                // const verificacionOK = verificacion.every(ver => 
+                //     userId.documents.some(obj => obj.name === ver)
+                // )
+
+                // if(!verificacionOK){
+                //     const cartId = await cartManager.getCartById(req.user.cart._id)
+                //     res.render('errorCarrito', {
+                //         title: '¡No posee la documentacion necesarioa para pasar a ser Premium!',
+                //         user: req.user ? {
+                //             ...req.user,
+                //             isAdmin: req.user.role == 'admin',
+                //             isPublic: req.user.role == 'Customer',
+                //             isPremium: req.user.role == 'Premium'
+                //         } : null,
+                //         idCart: cartId._id,
+                //         style: 'order'
+                //     })
+                //     return
+                // }
 
                 const user = await userManager.updateUser(uid, {role: 'Premium'})
                 if(user.matchedCount >= 1){
